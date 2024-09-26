@@ -1,0 +1,82 @@
+# Angular specific files
+node_modules/
+dist/
+tmp/
+out-tsc/
+coverage/
+aot/
+.bazelrc
+.yarn/
+.yarnrc
+.pnp.js
+.pnp.loader.mjs
+.angular/
+.angular/cache/
+.angular-build/
+
+# Environment files
+environment.ts
+environment.prod.ts
+src/environments/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.user
+
+# Logs and crash reports
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.idea/
+*.rptproj.user
+*.rsuser
+*.userprefs
+*.cache/
+*.history/
+
+# Dependency directories
+node_modules/
+jspm_packages/
+typings/
+bower_components/
+
+# Package locks
+package-lock.json
+yarn.lock
+
+# Build files
+dist/
+tmp/
+out-tsc/
+coverage/
+e2e/
+
+# System files
+.DS_Store
+Thumbs.db
+*.stackdump
+*.pid
+
+# Optional cache files
+npm-cache/
+yarn-error.log
+pnpm-lock.yaml
+
+# Compiled files
+*.js
+*.jsx
+*.map
+*.css
+*.min.css
+*.min.js
+
+# TypeScript files
+*.tsbuildinfo

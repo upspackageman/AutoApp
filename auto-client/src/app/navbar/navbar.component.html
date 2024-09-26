@@ -1,0 +1,22 @@
+<mat-toolbar [ngClass]="{'scrolled': isScrolled}"  class="main-nav" color="primary">
+    <mat-toolbar-row id="mobile_display">
+      <button id="mobile" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Side nav toggle icon">
+        <mat-icon id="nav-icon">menu</mat-icon>
+      </button>
+      <mat-menu id="mobile-menu" #menu="matMenu">
+        <!-- <button mat-button routerLink="/home">Home</button> -->
+        <button mat-button routerLink="/vehicles">Vehicles</button>
+        <button mat-button routerLink="/carseat">Car Seat Inspection</button>
+        <button mat-button routerLink="/investigation">Vehicle Investigation</button>
+      </mat-menu>
+      <span class="spacer"></span>
+      <nav id="desktop">
+        <!-- <button mat-button routerLink="/home">Home</button> -->
+        <button mat-button routerLink="/vehicles">Vehicles</button>
+        <button mat-button routerLink="/carseat">Car Seat Inspection</button>
+        <button mat-button routerLink="/investigation">Vehicle Investigation</button>
+        <!-- <button mat-button routerLink="/contact">Contact</button> -->
+      </nav>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  

@@ -1,0 +1,372 @@
+<main class="investigation">
+  <section class="vehicle-details">
+        <div class="container">
+          <div class="item">
+            <mat-form-field
+              class="date-select desktop fade-in-fwd"
+              style="margin-top: 10px"
+            >
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [formGroup]="range" [rangePicker]="picker2">
+                <input
+                  matStartDate
+                  formControlName="start"
+                  placeholder="Start date"
+                />
+                <input
+                  matEndDate
+                  formControlName="end"
+                  placeholder="End date"
+                  (dateChange)="dateChange()"
+                />
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker #picker2></mat-date-range-picker>
+
+              @if (range.controls.start.hasError('matStartDateInvalid')) {
+              <mat-error>Invalid start date</mat-error>
+              } @if (range.controls.end.hasError('matEndDateInvalid')) {
+              <mat-error>Invalid end date</mat-error>
+              }
+            </mat-form-field>
+           
+
+            <div class="paginator-container-mobile fade-in-fwd">
+              
+              <mat-form-field class="date-select">
+                <mat-label>Enter a date range</mat-label>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                  <input matStartDate formControlName="start" placeholder="Start date" />
+                  <input matEndDate formControlName="end" placeholder="End date" (dateChange)="dateChange()" />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              
+                <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">
+                  Invalid start date
+                </mat-error>
+                <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">
+                  Invalid end date
+                </mat-error>
+              </mat-form-field>
+              <!-- <div *ngIf="investgationPagination[0]?.total" class="total">
+                <span
+                  >Total Inquiries ({{
+                    investgationPagination[0]?.total
+                  }})</span
+                >
+              </div> -->
+              <mat-paginator
+                (page)="pageChange($event, investgationPagination[0])"
+                [length]="investgationPagination[0]?.total"
+                [pageSize]="investgationPagination[0]?.max"
+                aria-label="Select page"
+              >
+              </mat-paginator>
+
+            </div>
+            <div *ngIf="!busyService.loading && investigationResult.length===0 && init===false"  class="no-list fade-in-top mobile-no-result">
+              <h3>No Results</h3>
+            </div>
+            <div *ngIf="init==true" class="memo fade-in-left">
+              <h3>Are you searching for the latest safety recalls or investigations?</h3>
+              <h4>Choose the date range above for when a defect investigation was opened or closed.</h4>
+            </div>
+            <div class="mobile-list">
+              <mat-progress-bar *ngIf="busyService.loading && investigationResult.length===0" mode="indeterminate"></mat-progress-bar>
+              <mat-accordion *ngIf="investigationResult.length!==0">
+                <mat-expansion-panel
+                  class="custom-panel fade-in-top"
+                  *ngFor="let item of investigationResult"
+                  (opened)="panelOpenState.set(true)"
+                  (closed)="panelOpenState.set(false)"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="date-issued">
+                      {{ formatDate2(item.dateOpened) }} 
+                    </mat-panel-title>
+                    <mat-panel-title *ngIf="item.associatedProducts[0]?.manufacturer" class="mobile-title-panel manufactuer">
+                      {{ item.associatedProducts[0]?.manufacturer }}
+                    </mat-panel-title>
+                    <mat-panel-title *ngIf="!item.associatedProducts[0]?.manufacturer" class="mobile-title-panel manufactuer">
+                      UNKNOWN
+                    </mat-panel-title>
+
+                    <mat-panel-title class="mobile-title-panel">
+                      {{ item.subject }}
+                    </mat-panel-title>
+
+                    <mat-panel-title class="mobile-title-panel">
+                      <!-- {{ item.dateOpened }} -->
+                      @if(item.dateClosed){
+                        <span class="status-closed">Closed</span>
+                        } @else{ <span class="status-open">Open</span> }
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="selection">
+                    <button class="info-btn"  mat-stroked-button (click)="getModal(issue, item)">
+                      Issue
+                    </button>
+
+                    <button class="info-btn"  mat-stroked-button [matMenuTriggerFor]="vdocs">
+                      Docs
+                    </button>
+                    <mat-menu #vdocs>
+                      <button
+                        mat-menu-item
+                        *ngFor="let _item of item.associatedDocuments"
+                      >
+                        <a class="docs"
+                          href="{{_item.url}}"
+                          target="_blank"
+                           matTooltip="{{_item.summary}}"
+                          rel="noopener noreferrer"
+                          >{{ _item.fileName }}</a
+                        >
+                      </button>
+                    </mat-menu>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+
+              <div class="spacing"></div>
+            </div>
+          </div>
+          <div class="item item-right">
+            <div class="paginator-container fade-in-fwd">
+              <!-- <div *ngIf="investgationPagination[0]?.total" class="total">
+                <span
+                  >Total Inquiries ({{
+                    investgationPagination[0]?.total
+                  }})</span
+                >
+              </div> -->
+              <mat-paginator
+                (page)="pageChange($event, investgationPagination[0])"
+                [length]="investgationPagination[0]?.total"
+                [pageSize]="investgationPagination[0]?.max"
+                aria-label="Select page"
+              > 
+              </mat-paginator>
+            </div>
+            <mat-progress-bar *ngIf="busyService.loading && investigationResult.length===0" mode="indeterminate"></mat-progress-bar>
+            <div *ngIf="!busyService.loading && investigationResult.length===0 && init===false"  class="no-list fade-in-top">
+              <h3>No Results</h3>
+            </div>
+            <div *ngIf="investigationResult.length!==0"  class="accordion-container fade-in-top">
+              <mat-accordion>
+                <mat-expansion-panel
+                  class="custom-panel"
+                  *ngFor="let item of investigationResult"
+                  (opened)="panelOpenState.set(true)"
+                  (closed)="panelOpenState.set(false)"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="date-issued">
+                      {{ formatDate2(item.dateOpened) }}
+                    </mat-panel-title>
+                    <mat-panel-title class="manufactuer">
+                      {{ item.associatedProducts[0].manufacturer }}
+                    </mat-panel-title>
+
+                    <mat-panel-title>
+                      {{ item.subject }}
+                    </mat-panel-title>
+
+                    <mat-panel-title>
+                      <!-- {{ item.dateOpened }} -->
+                      @if(item.dateClosed){
+                      <span class="status-closed">Closed</span>
+                      } @else{ <span class="status-open">Open</span> }
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="selection">
+                    <button 
+                    mat-stroked-button
+                     matTooltip="View Summary"
+                    
+                    (click)=" issueTab(item)">
+                      Issue
+                    </button>
+
+                    <button mat-stroked-button [matMenuTriggerFor]="vdocs">
+                      Documents
+                    </button>
+                    <mat-menu #vdocs>
+                     
+                      <ng-container *ngFor="let _item of item.associatedDocuments">
+                        <a
+                          *ngIf="checkFileFormat(_item.url)"
+                          mat-menu-item
+                          (click)="getModalDoc(doc, _item.url)"
+                          matTooltip="{{_item.summary}}"
+                          [matTooltipPosition]="position.value!"
+                          rel="noopener noreferrer"
+                          >{{ _item.fileName }}</a
+                        >
+                        <a
+                          *ngIf="!checkFileFormat(_item.url)"
+                          mat-menu-item
+                          href="{{_item.url}}"
+                          
+                          matTooltip="{{_item.summary}}"
+                          [matTooltipPosition]="position.value!"
+                          rel="noopener noreferrer"
+                          >{{ _item.fileName }}</a
+                        >
+                      </ng-container>
+                    </mat-menu>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+              <div class="spacing"></div>
+            </div>
+
+
+
+            
+
+            <ng-template #issue >
+              <div class="header">
+                <button mat-flat-button (click)="closeDialog()">Close</button>
+                <h3>
+                  NHTSA Action Number: {{ issueDetail.nhtsaActionNumber }}
+                </h3>
+                <hr />
+              </div>
+             
+              <div class="issue">
+                
+                <div class="summary">
+                 
+                  <div class="issue-details">
+                    <h4>Subject</h4>
+                    <span>{{ issueDetail.subject }}</span>
+                    <h4>Date Opened</h4>
+                    <span>{{ formatDate2(issueDetail.dateOpened)}}</span>
+                    <h4>Status</h4>
+                    @if(issueDetail.dateClosed){
+                      <span>Closed: {{formatDate2(issueDetail.dateClosed)}}</span>
+                    }@else {
+                      <span>Open</span>
+                    }
+                   
+                    <h4>Summary</h4>
+                    <span [innerHTML]="issueDetail.summary"></span>
+                  </div>
+                </div>
+                <div class="vehicle-components">
+                  <h3>Components</h3>
+                  <hr />
+                  <div *ngFor="let item of issueAssociatedCom">
+                    <span>Name: </span><span>{{ item.name }}</span
+                    ><br />
+                    <span>Description: </span><span>{{ item.description }}</span
+                    ><br />
+                    <br />
+                  </div>
+                </div>
+                <div class="assocated-products">
+                  <h3>Associate Products</h3>
+                  <hr />
+                  <div *ngFor="let item of issueAssociatedProd">
+                    <span>Manufacturer: </span
+                    ><span>{{ item.manufacturer }}</span
+                    ><br />
+                    <span>Year: </span><span>{{ item.productYear }}</span
+                    ><br />
+                    <span>Make: </span><span>{{ item.productMake }}</span
+                    ><br />
+                    <span>Model: </span><span>{{ item.productModel }}</span
+                    ><br />
+                    <span>Type: </span><span>{{ item.type }}</span
+                    ><br /><br />
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+
+            <ng-template #doc>
+              <div class="responsive-iframe">
+                <div class="header">
+                  <button mat-flat-button (click)="closeDialog()">Close</button>
+                  
+                  <hr />
+                </div>
+                <iframe [src]="pdfUrl" width="900%" height="100%" ></iframe>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+  </section>
+</main>
+
+
+<section class="issue-info">
+  <div class="header">
+    <button mat-flat-button (click)="closeIssueTab()">Close</button>
+    <h3>
+      NHTSA Action Number: {{ issueDetail.nhtsaActionNumber }}
+    </h3>
+    <hr />
+  </div>
+ 
+  <div class="issue">
+    
+    <div class="summary">
+     
+      <div class="issue-details">
+        <h4>Subject</h4>
+        <span>{{ issueDetail.subject }}</span>
+        <h4>Date Opened</h4>
+        <span>{{ formatDate2(formatDateToMMDDYYYY(issueDetail.dateOpened))}}</span>
+        <h4>Status</h4>
+        @if(issueDetail.dateClosed){
+          <span>Closed: {{formatDate2(formatDateToMMDDYYYY(issueDetail.dateClosed))}}</span>
+        }@else {
+          <span>Open</span>
+        }
+       
+        <h4>Summary</h4>
+        <span [innerHTML]="issueDetail.summary"></span>
+      </div>
+    </div>
+    <div class="vehicle-components">
+      <h3>Components</h3>
+      <hr />
+      <div *ngFor="let item of issueAssociatedCom">
+        <span>Name: </span><span>{{ item.name }}</span
+        ><br />
+        <span>Description: </span><span>{{ item.description }}</span
+        ><br />
+        <br />
+      </div>
+    </div>
+    <div class="assocated-products">
+      <h3>Associate Products</h3>
+      <hr />
+      <div *ngFor="let item of issueAssociatedProd">
+        <span>Manufacturer: </span
+        ><span>{{ item.manufacturer }}</span
+        ><br />
+        <span>Year: </span><span>{{ item.productYear }}</span
+        ><br />
+        <span>Make: </span><span>{{ item.productMake }}</span
+        ><br />
+        <span>Model: </span><span>{{ item.productModel }}</span
+        ><br />
+        <span>Type: </span><span>{{ item.type }}</span
+        ><br /><br />
+      </div>
+    </div>
+    <div class="dd-space">
+      
+    </div>
+  </div>
+</section>

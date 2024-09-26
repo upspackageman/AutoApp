@@ -1,0 +1,354 @@
+<main class="car-seat">
+  <section class="vehicle-details" >
+    @if(carInspectionState.length === 0){
+      <div class="select-state-mobile fade-in-fwd">
+        <div>
+          <h1>Car Seat Inspection</h1>
+          <h4>If you’ve recently installed a car seat or need assistance with its installation or usage, visit a nearby car seat inspection station. Certified technicians offer free inspections in most cases and will demonstrate the correct way to install and use your car seat.</h4>
+        </div>
+       
+      </div>
+    }
+        <div class="container vehicle-details-backdrop">
+          
+          <div class="item mobile">
+            <mat-form-field>
+              <mat-label>Select State</mat-label>
+              <mat-select (selectionChange)="carSeatInspectionLocatorByState($event.value)">
+                <mat-option [value]="item" *ngFor="let item of states">{{item}}</mat-option>
+              </mat-select>
+              
+            </mat-form-field>
+            <br>
+            @if(carInspectionState.length !== 0){
+            <mat-form-field>
+              <mat-label>Select Zip</mat-label>
+              <mat-select (selectionChange)="carSeatInspectionLocatorByZip($event.value)">
+                <mat-option value="999">All Zip</mat-option>
+                <mat-option [value]="item" *ngFor="let item of zipList">{{item}}</mat-option>
+              </mat-select>
+              
+            </mat-form-field>
+          }
+            <button  mat-raised-button class="mobileBtn fade-in-fwd" *ngIf="carInspectionZip.length!==0 && allZip===0" (click)="getStateListModal(byZip)" mat-flat-button>Get List</button>
+            <button  mat-raised-button class="mobileBtn fade-in-fwd" *ngIf="allZip===1" (click)="getStateListModal(byState)" mat-flat-button>Get List</button>
+            <mat-progress-bar class="mobile-loader" *ngIf="busyService.loading " mode="indeterminate"></mat-progress-bar>
+            
+          </div>
+          <div class="item desktop">
+            
+
+           
+            <div id="by-state" class="contacts  fade-in-fwd">
+              @if(carInspectionState.length === 0){
+                <div class="select-state ">
+                  <div>
+                    <h1>Car Seat Inspection</h1>
+                    <h4>If you’ve recently installed a car seat or need assistance with its installation or usage, visit a nearby car seat inspection station. Certified technicians offer free inspections in most cases and will demonstrate the correct way to install and use your car seat.</h4>
+                  </div>
+                 
+                </div>
+              }
+              <mat-progress-bar *ngIf="busyService.loading " mode="indeterminate"></mat-progress-bar>
+              @if(carInspectionState.length !== 0 && carInspectionZip.length === 0){
+                <div class="tables fade-in-top">
+                  <table>
+                    <thead>
+                        <tr>
+                            <th>Organization</th>
+                            <!-- <th>Name</th> -->
+                            <th>Address</th>
+                            
+                            <!-- <th>City</th>
+                            <th>State</th>-->
+                            <!-- <th>Zip</th>  -->
+                            <th></th>
+                            <th>Email</th>
+                            <th></th>
+                            <th>Phone</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let info of carInspectionState">
+                        <tr>
+                            <td class="organization">{{info.Organization}}</td>
+                            <!-- <td *ngIf="info.ContactFirstName">{{info.ContactFirstName +' '+ info.ContactLastName}}</td>
+                            <td *ngIf="!info.ContactFirstName">No contact name available</td> -->
+                            <td>{{info.AddressLine1+' '+info.City+' '+info.State+' '+info.Zip}} </td>
+                            
+                            <!-- <td>{{info.City}}</td>
+                            <td>{{info.State}}</td>-->
+                            <!-- <td>{{info.Zip}}</td> -->
+                            <td><button (click)="mapTab(info.AddressLine1+' '+info.Zip, info.LastUpdatedDate, info.Organization)" ><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon></button></td>
+                            @if(info.Email){
+                              <td>{{info.Email}}</td>
+                              <td><a href="mailto:info.Email"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="email"></mat-icon></a></td>
+                            }
+                           
+                            @if(!info.Email){
+                              <td ><h4>No Email available</h4> </td>
+                              <td> 
+                                <span class="not_avail">
+                                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ba005c"><path d="M404.92-469.54Zm171.7-27.08ZM804.08-70.39 694.46-180H172.31Q142-180 121-201q-21-21-21-51.31v-455.38Q100-738 121-759q21-21 51.31-21H180l60 60h-67.69q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v455.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h462.15L79.62-794.85l42.77-42.76 724.46 724.46-42.77 42.76Zm48.46-150.3L800-273.23v-389.08L563.08-510.15l-38.23-38.23 269-171.62H353.23l-60-60h494.46Q818-780 839-759q21 21 21 51.31v455.38q0 8.46-1.81 16.62-1.81 8.15-5.65 15Z"/></svg>
+                                </span>
+
+                               </td>
+                            }
+                            
+                            <!-- <td *ngIf="!info.Email"><a *ngIf="info.Email" href="mailto:info.Email"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="email"></mat-icon></a></td> -->
+
+                            @if(info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'){
+                              <td>{{info.Phone1}}</td>
+                              <td><a href="tel:info.Phone1"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="smartphone"></mat-icon></a></td>
+                            }
+
+
+                            @if(info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'){
+                              <td> <h4>No number available</h4></td>
+                              <td><span class="not_avail"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="mobile_off"></mat-icon></span></td>
+                            }
+                            <!-- <td *ngIf="info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'">No number available</td>
+                            <td *ngIf="info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'">{{info.Phone1}}</td> -->
+      
+                        </tr>
+                        
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                  </table>
+                </div>
+                
+            }
+              @if(carInspectionZip.length !== 0){
+            <div class="tables fade-in-top">
+              <table>
+                <thead>
+                    <tr>
+                        <th>Organization</th>
+                        <!-- <th>Name</th> -->
+                        <th>Address</th>
+                        <th></th>
+                        <!-- <th>City</th>
+                        <th>State</th> -->
+                        <th>Zip</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let info of carInspectionZip">
+                    <tr>
+                        <td class="organization">{{info.Organization}}</td>
+                        <!-- <td *ngIf="info.ContactFirstName">{{info.ContactFirstName +' '+ info.ContactLastName}}</td>
+                        <td *ngIf="!info.ContactFirstName">No contact name available</td> -->
+                        <td>{{info.AddressLine1+' '+info.City+' '+info.State}} </td>
+                            <td><button (click)="mapTab(info.AddressLine1, info.LastUpdatedDate, info.Organization)" ><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon></button></td>
+                            <!-- <td>{{info.City}}</td>
+                            <td>{{info.State}}</td>-->
+                        <td>{{info.Zip}}</td>
+                        <td *ngIf="info.Email">{{info.Email}}</td>
+                        <td *ngIf="!info.Email"><p></p>Email not available</td>
+                        <td *ngIf="info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'">No number available</td>
+                        <td *ngIf="info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'">{{info.Phone1}}</td>
+  
+                    </tr>
+                    
+                    <!-- Add more rows as needed -->
+                </tbody>
+              </table>
+            </div>
+          }
+            </div>
+            
+            
+            
+          </div>
+      </div>
+
+      <!-- <mat-tab label="Zipcode">
+        <div class="container">
+          <div class="item mobile">
+            <mat-form-field >
+              <mat-label>Input</mat-label>
+              <input (blur)="unZipInit()" #zip matInput>
+            </mat-form-field>
+            <button mat-flat-button (click)="carSeatInspectionLocatorByZip(zip.value)">Find facilities</button>
+  
+            <mat-card>
+              <mat-card-content  *ngIf="carInspectionZip.length===0 && init===false && zip.value!==''">No facilities in the area of: {{currentZip}}</mat-card-content>
+              @if(zip.value==='' && zipInit ===true){
+              <mat-card-content>
+                  <div class="zip-needed">
+                    Please Enter Zipcode
+                  </div>
+              </mat-card-content>
+            }
+            </mat-card>
+            <button mat-flat-button class="mobileBtn"  *ngIf="carInspectionZip.length!==0 && init===false" (click)="getStateListModal(byZip)">Get List</button>
+          </div>
+          <div class="item desktop">
+            <div id="by-zip"  class="contacts">
+              
+              @if(carInspectionZip.length===0 && init ===true){
+                <div class="zip-needed">
+                  Please Enter Zipcode
+                </div>
+              }
+              @if(carInspectionZip.length!==0 ){
+              <table>
+                <thead>
+                    <tr>
+                        <th>Organization</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Zip</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let info of carInspectionZip">
+                    <tr>
+                        <td>{{info.Organization}}</td>
+                        <td *ngIf="info.ContactFirstName">{{info.ContactFirstName +' '+ info.ContactLastName}}</td>
+                        <td *ngIf="!info.ContactFirstName">No contact name available</td>
+                        <td>{{info.AddressLine1}}</td>
+                        <td>{{info.City}}</td>
+                        <td>{{info.State}}</td>
+                        <td>{{info.Zip}}</td>
+                        <td *ngIf="info.Email">{{info.Email}}</td>
+                        <td *ngIf="!info.Email">Email not available</td>
+                        <td *ngIf="info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'">No number available</td>
+                        <td *ngIf="info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'">{{info.Phone1}}</td>
+  
+                    </tr>
+                    
+                   
+                </tbody>
+            </table>
+          }
+            </div>
+          </div>
+      </div>
+    </mat-tab> -->
+
+  </section>
+    
+      
+</main>
+
+<!--  -->
+
+
+<ng-template #byState>
+  <div class="main-modal-seat-header">
+    <button (click)="closeDialog()" mat-flat-button class="mobileBtn1">Close</button>
+    <div>
+      <h3>Facilities</h3> 
+      <hr>
+    </div>
+  </div>
+ 
+ 
+ 
+ 
+<div class="list">
+ 
+  <mat-accordion  *ngFor="let info of carInspectionState">
+    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+      <mat-expansion-panel-header>
+        <mat-panel-description> {{info.Organization}}</mat-panel-description>
+        <!-- <mat-panel-description>
+          {{info.AddressLine1}}
+           Currently I am {{panelOpenState() ? 'open' : 'closed'}} 
+        </mat-panel-description> -->
+        <mat-panel-description>
+          {{info.City+', '+info.State}}
+          <!-- Currently I am {{panelOpenState() ? 'open' : 'closed'}} -->
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item  *ngIf="info.AddressLine1"><a (click)="locationModal(info.AddressLine1, info.LastUpdatedDate, info.Organization, map)"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon></a><span class="mobile-car-list">{{info.AddressLine1}}</span></mat-list-item>
+        <mat-list-item *ngIf="!info.AddressLine1"><span class="mobile-car-list"></span>N/A</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item *ngIf="info.Email"><a href='mailto:{{info.Email}}'><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="email"></mat-icon></a><span class="mobile-car-list">{{info.Email}}</span></mat-list-item>
+        <mat-list-item *ngIf="!info.Email" style="text-align:center"><span class="mobile-car-list" >N/A</span></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item *ngIf="info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'"><a href='tel:{{info.Phone1}}'><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="smartphone"></mat-icon></a><span class="mobile-car-list">{{info.Phone1}}</span></mat-list-item>
+        <mat-list-item *ngIf="info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'" style="text-align:center"><span class="mobile-car-list">N/A</span></mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+ 
+
+</div>
+</ng-template>
+
+
+
+<ng-template #byZip>
+  <div class="main-modal-seat-header">
+    <button (click)="closeDialog()" mat-flat-button class="mobileBtn1">Close</button>
+    <div>
+      <h3>Facilities</h3> 
+      <hr>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="list fade-in-top">
+    <mat-accordion  *ngFor="let info of carInspectionZip">
+      <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+        <mat-expansion-panel-header>
+          <mat-panel-description> {{info.Organization}}</mat-panel-description>
+          <!-- <mat-panel-description>
+            {{info.AddressLine1}}
+             Currently I am {{panelOpenState() ? 'open' : 'closed'}} 
+          </mat-panel-description> -->
+          <mat-panel-description>
+            {{info.City+', '+info.State}}
+            <!-- Currently I am {{panelOpenState() ? 'open' : 'closed'}} -->
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list>
+          <mat-list-item *ngIf="info.AddressLine1"><a (click)="locationModal(info.AddressLine1, info.LastUpdatedDate, info.Organization, map)"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon></a>{{info.AddressLine1}}</mat-list-item>
+         <mat-list-item *ngIf="!info.AddressLine1">N/A</mat-list-item>
+         <mat-divider></mat-divider>
+         <mat-list-item *ngIf="info.Email"><a href='mailto:{{info.Email}}'><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="email"></mat-icon></a>{{info.Email}}</mat-list-item>
+         <mat-list-item *ngIf="!info.Email" style="text-align:center">N/A</mat-list-item>
+         <mat-divider></mat-divider>
+         <mat-list-item *ngIf="info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'"><a href='tel:{{info.Phone1}}'><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="smartphone"></mat-icon></a>{{info.Phone1}}</mat-list-item>
+         <mat-list-item *ngIf="info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'" style="text-align:center">N/A</mat-list-item>
+         </mat-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+   
+  
+  </div>
+  </ng-template>
+
+
+  <ng-template #map>
+    <section class="map-mobile-location">
+      <div class="map-mobile-header">
+        <button mat-flat-button (click)="closeMapDialog()" class="mobileBtn1">Close</button>
+      </div>
+      <h1 id="map-mobile-title">{{orgName}}</h1>
+      <div class="map-mobile-body">
+        <iframe [src]="sanitizer.bypassSecurityTrustResourceUrl(mapUrl)" width="100%" height="100%" ></iframe>
+      </div>
+      <h4 id="last-update">Last Updated:<span>{{locationLastUpdate}}</span></h4>
+    </section>
+  </ng-template>
+
+  <section class="map-location">
+    <div class="map-header">
+      <button mat-flat-button  (click)="closeMapTab()">Close</button>
+    </div>
+    <h1>{{orgName}}</h1>
+    <div class="map-body">
+      <iframe [src]="sanitizer.bypassSecurityTrustResourceUrl(mapUrl)" width="100%" height="100%" ></iframe>
+    </div>
+    <h4>Last Updated:<span>{{locationLastUpdate}}</span></h4>
+  </section>

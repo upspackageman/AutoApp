@@ -1,0 +1,46 @@
+<main class="admin-login">
+  <div class="login-form">
+    <div class="fields">
+      <mat-form-field>
+        <mat-label>Enter Login</mat-label>
+        <input
+          matInput
+          placeholder="Login"
+          [formControl]="loginForm.get('login')"
+          (blur)="updateErrorMessage()"
+          required
+        />
+        @if (loginForm.get('login')?.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enter Password</mat-label>
+        <input
+          matInput
+          [type]="hide() ? 'password' : 'text'"
+          placeholder="Password"
+          [formControl]="loginForm.get('password')"
+          (blur)="updateErrorMessage()"
+          required
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        @if (loginForm.get('password')?.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+        }
+      </mat-form-field>
+      @if (!loginForm.get('password')?.invalid &&
+      !loginForm.get('login')?.invalid) {
+      <button mat-raised-button (click)="login()">Login</button>
+      }
+    </div>
+  </div>
+</main>

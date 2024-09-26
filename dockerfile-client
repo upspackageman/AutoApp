@@ -1,0 +1,28 @@
+# Use Node.js image for Angular
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Install Angular CLI
+RUN npm install -g @angular/cli@18
+
+# Copy project files
+COPY . .
+
+# Install dependencies
+RUN npm install
+
+# Expose port 4200 for Angular
+EXPOSE 4200
+
+# Command to start the app
+CMD ["npm", "start"]
+
+
+
+
+
+
+
+

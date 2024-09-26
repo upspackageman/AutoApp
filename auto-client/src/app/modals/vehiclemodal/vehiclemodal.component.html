@@ -1,0 +1,30 @@
+<div class="findVehicle">
+    <button class="close" mat-button (click)="closeDialog()">Close</button>
+    <mat-form-field class="form-field">
+        <mat-label>Year</mat-label>
+        <mat-select (selectionChange)="getVehiclesByYear($event)" >
+          <mat-option [value]="year" *ngFor="let year of years">{{year}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-label>Make</mat-label>
+        <mat-select (selectionChange)="getVehicleModel($event)">
+          <mat-option [value]="vehicle" *ngFor="let vehicle of vehicleByYears">{{vehicle.Make}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-label>Model</mat-label>
+        <mat-select (selectionChange)="getVehicleCompliants($event)">
+          <mat-option [value]="vehicle" *ngFor="let vehicle of vehicleModels">{{vehicle.Model}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-label>Vehicle(s)</mat-label>
+        <mat-select>
+          <mat-option value="one">First option</mat-option>
+          <mat-option value="two">Second option</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button class="detail-btn" >Get Vehicle</button>
+</div>
+

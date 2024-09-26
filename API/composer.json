@@ -1,0 +1,24 @@
+{
+  "name": "ward/auto",
+  "description": "auto app",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Config\\": "API/Config/",
+      "Models\\": "API/Models/",
+      "Controllers\\": "API/Controllers/"
+    }
+  },
+  "authors": [
+    {
+      "name": "William Ward"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "guzzlehttp/guzzle": "*",
+    "php-ffmpeg/php-ffmpeg": "^1.2",
+    "firebase/php-jwt": "^6.10"
+  }
+}

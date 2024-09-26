@@ -1,0 +1,10 @@
+<div class="rss-feed">
+    <h2>RSS Feed Reader</h2>
+    <ul>
+      <li *ngFor="let item of feedItems">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.contentSnippet }}</p>
+        <a [href]="item.link" target="_blank">Read more</a>
+      </li>
+    </ul>
+  </div>
