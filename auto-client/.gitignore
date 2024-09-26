@@ -49,7 +49,7 @@ typings/
 bower_components/
 
 # Package locks
-package-lock.json
+# package-lock.json
 yarn.lock
 
 # Build files
