@@ -12,7 +12,6 @@ RUN a2enmod rewrite
 
 # Copy only the necessary PHP project files to the container
 COPY ./php/ /var/www/html/  
-# Assuming PHP API files are in the 'php' directory
 
 # Set proper permissions for the web server
 RUN chown -R www-data:www-data /var/www/html
