@@ -1,5 +1,5 @@
 # Use the official Node.js image as the build environment
-FROM node:16 AS build
+FROM node:18 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -8,13 +8,13 @@ WORKDIR /app
 COPY ./auto-client/package*.json ./
 
 # Set npm timeout
-RUN npm config set timeout 60000
+# RUN npm config set timeout 60000
 
 # Install dependencies
 RUN npm install --force
 
 # Copy the rest of your application code
-COPY ./auto-client/ .
+COPY ./auto-client ./
 
 # Build the application
 RUN npm run build --prod
