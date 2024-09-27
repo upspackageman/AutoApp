@@ -11,6 +11,9 @@ COPY ./auto-client/package-lock.json .
 # Set npm timeout
 # RUN npm config set timeout 60000
 
+# Install dependencies with legacy-peer-deps to avoid conflicts
+RUN npm install --legacy-peer-deps --force
+
 # Install dependencies
 RUN npm install --force
 
