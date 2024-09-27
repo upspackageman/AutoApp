@@ -35,3 +35,5 @@ COPY --from=build /app/dist/auto-client /usr/share/nginx/html
 # Expose the port Nginx is running on
 EXPOSE 80
 
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
