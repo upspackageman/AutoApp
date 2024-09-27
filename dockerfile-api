@@ -10,7 +10,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 WORKDIR /var/www/html
 
 # Copy the PHP files into the container
-COPY php/ ./
+COPY . .
 
 # Expose port 80
 EXPOSE 80
