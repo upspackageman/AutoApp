@@ -1,0 +1,43 @@
+.admin .tabs{
+    position: relative;
+    top: 100px;
+}
+
+.admin .logout{
+    position:relative;
+    top: 80px;
+    left:20px;
+    margin-bottom: 20px;
+}
+
+.admin .stats{
+    align-items:center;
+    background: linear-gradient(45deg, rgb(168, 69, 69), rgb(93, 12, 12));
+    width: 100%;
+    height: 800px;
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+    height: 800px !important;
+    overflow: auto;
+    margin-bottom: 100px;
+}
+
+.table{
+    background: #fff;
+}
+
+
+
+.map{
+    width: 100%;
+    height: 800px;
+}
+
+
+google-map {
+   
+    display: flex !important;
+    height: 800px;
+    width: 100%;
+  }

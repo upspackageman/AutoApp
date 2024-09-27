@@ -1,0 +1,24 @@
+.findVehicle{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 25px;
+}
+
+.findVehicle .form-field{
+    padding-bottom: 5px;
+}
+
+.findVehicle .close{
+   
+   margin-left:90%;
+    width: 20px;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: rgba(255,255,255, 0) !important;
+}
+
+::ng-deep .mdc-dialog--open .mat-mdc-dialog-surface{
+    background-color: rgba(255,255,255, .7) !important;
+}

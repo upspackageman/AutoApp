@@ -71,12 +71,12 @@ yarn-error.log
 pnpm-lock.yaml
 
 # Compiled files
-*.js
-*.jsx
-*.map
-*.css
-*.min.css
-*.min.js
+# *.js
+# *.jsx
+# *.map
+# *.css
+# *.min.css
+# *.min.js
 
 # TypeScript files
 *.tsbuildinfo
