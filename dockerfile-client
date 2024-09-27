@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./auto-client/package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --force
 
 # Copy the rest of your application code
 COPY ./auto-client/ .
