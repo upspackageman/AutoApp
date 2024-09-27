@@ -3,7 +3,7 @@ import { VehiclesComponent } from './vehicles/vehicles.component';
 import { HomeComponent } from './home/home.component';
 import { CarseatinspectionComponent } from './carseatinspection/carseatinspection.component';
 import { InvestigationComponent } from './investigation/investigation.component';
-import { RssComponent } from './rss/rss.component';
+// import { RssComponent } from './rss/rss.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { authGuard } from './guards/auth.guard';
