@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'investigation', component: InvestigationComponent},
   { path: 'adminlogin', component: LoginComponent},
   { path: 'admin', component: AdminComponent,canActivate:[authGuard]},
-  { path: 'rss', component: RssComponent},
+  // { path: 'rss', component: RssComponent},
   {path:'terms', component:TermsComponent},
   {path:'privacy', component:PrivacyComponent}
 ];
