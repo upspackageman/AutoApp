@@ -1,36 +1,30 @@
-# Use Node.js image for Angular
-FROM node:18-alpine
+# Stage 1: Build Angular application
+FROM node:18-alpine AS build
 
 # Set working directory
 WORKDIR /app
 
-# Copy only the package.json and package-lock.json files to install dependencies
-COPY ./auto-client/package.json .
-COPY ./auto-client/package-lock.json .
+# Copy the package.json and package-lock.json to install dependencies
+COPY ./angular/package.json ./
+COPY ./angular/package-lock.json ./
 
-# Install npm dependencies
-RUN npm install --force
+# Install dependencies (use production mode to skip devDependencies if desired)
+RUN npm ci --only=production --force
 
-# Install Angular CLI
-RUN npm install -g @angular/cli@18
+# Copy all the Angular project files
+COPY ./auto-client/ ./
 
-# Copy project files
-COPY ./auto-client .
+# Build the Angular app in production mode
+RUN npm run build -- --configuration production
 
-# Build the Angular app
-RUN ng build --configuration=production
+# Stage 2: Serve the application with Nginx
+FROM nginx:alpine
 
-# Stage 2: Serve the Angular app using Nginx
-FROM nginx:latest
+# Copy built Angular files from the previous stage to the Nginx html directory
+COPY --from=build /app/dist/auto-client /usr/share/nginx/html
 
-# Copy the built Angular app from the builder stage
-COPY --from=builder /app/dist/auto-client /usr/share/nginx/html
-
+# Expose port 80
 EXPOSE 80
 
-
-
-
-
-
-
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
