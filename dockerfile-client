@@ -15,7 +15,7 @@ COPY ./auto-client/package-lock.json .
 RUN npm install --legacy-peer-deps --force
 
 # Install dependencies
-RUN npm install --force
+# RUN npm install --force
 
 # Install Angular CLI globally
 RUN npm install -g @angular/cli
