@@ -14,7 +14,7 @@ COPY ./auto-client/package*.json ./
 RUN npm install --force
 
 # Copy the rest of your application code
-COPY ./auto-client ./
+COPY auto-client ./
 
 # Build the application
 RUN npm run build --prod
