@@ -13,14 +13,17 @@ COPY ./auto-client/package*.json ./
 # Install dependencies
 RUN npm install --force
 
+# Install Angular CLI globally
+RUN npm install -g @angular/cli
+
 # Copy the rest of your application code
-COPY auto-client ./
+COPY ./auto-client .
 
 # Build the application
-RUN npm run build --prod
+RUN ng build --configuration=production
 
 # Use the official Nginx image to serve the application
-FROM nginx:alpine
+FROM nginx:latest
 
 # Copy the build output to Nginx's html directory
 COPY --from=build /app/dist/auto-client /usr/share/nginx/html
