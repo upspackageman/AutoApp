@@ -8,21 +8,25 @@ WORKDIR /app
 COPY ./auto-client/package.json .
 COPY ./auto-client/package-lock.json .
 
+# Install npm dependencies
+RUN npm install --force
+
 # Install Angular CLI
 RUN npm install -g @angular/cli@18
 
 # Copy project files
-COPY . .
+COPY ./auto-client .
 
-# Install dependencies
-RUN npm install
+# Build the Angular app
+RUN ng build --configuration=production
 
-# Expose port 4200 for Angular
-EXPOSE 4200
+# Stage 2: Serve the Angular app using Nginx
+FROM nginx:latest
 
-# Command to start the app
-CMD ["npm", "start"]
+# Copy the built Angular app from the builder stage
+COPY --from=builder /app/dist/auto-client /usr/share/nginx/html
 
+EXPOSE 80
 
 
 
