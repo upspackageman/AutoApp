@@ -98,6 +98,8 @@ export class VehiclesComponent {
   frontCrash:boolean=false;
   sideCrash:boolean=false;
   sidePoleCrash:boolean=false;
+  complaintText:boolean =false;
+  recallText:boolean=false;
  
   constructor(
     private nhtsaService: NhtsaService,
@@ -304,22 +306,32 @@ export class VehiclesComponent {
   }
 
   getRecallDetails(id: any) {
+    
     const recall = this.recalls;
+    this.recallText=false;
+    this.cdr.detectChanges();
 
     const foundItem = recall.find((item) => item?.NHTSACampaignNumber === id);
     if (foundItem) {
+      this.cdr.detectChanges();
       this.recallDetails = [foundItem].map((item) => item); // Wrap foundItem in an array to use map
+      this.recallText=true;
     }
   }
 
   getComplaintDetails(id: any) {
-    
+   
     const complaint = this.complaints;
-
+    this.complaintText = false;
+    console.log(this.complaintText)
+    this.cdr.detectChanges();
     const foundItem = complaint.filter((item) => id === item.odiNumber);
     if (foundItem) {
+      this.cdr.detectChanges();
       this.complaintDetails =[];
       this.complaintDetails = foundItem.map((item) => item); // Wrap foundItem in an array to use map
+      this.complaintText = true;
+      console.log(this.complaintText)
     }
   }
 

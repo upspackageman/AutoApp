@@ -231,42 +231,42 @@
                     }
                   }
                   @if(complaints.length !==0){
-                  <h1  style="text-align: left;">Complaint Number: {{complaintDetails?.[0]?.odiNumber}} </h1>
+                  <h1  style="text-align: left;">Complaint Number: <span  [ngClass]="{'complaintText': complaintText, 'complaintTextFadeOut': ! complaintText}" >{{complaintDetails?.[0]?.odiNumber}}</span> </h1>
                   <div class="complaint-details fade-in-fwd-detail">
                     <p>
-                      <span>Manufacturer:</span> {{complaintDetails?.[0]?.manufacturer}} 
+                      <span>Manufacturer:</span> <span  [ngClass]="{'complaintText': complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.manufacturer}}</span> 
                     </p>
                     <br>
                     <p>
-                      <span>Components:</span> {{complaintDetails?.[0]?.components}}
+                      <span>Components:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.components}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>VIN:</span> {{complaintDetails?.[0]?.vin}}
+                      <span>VIN:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.vin}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Date of Incident:</span> {{complaintDetails?.[0]?.dateOfIncident}}
+                      <span>Date of Incident:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.dateOfIncident}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Date Filed:</span> {{complaintDetails?.[0]?.dateComplaintFiled}}
+                      <span>Date Filed:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.dateComplaintFiled}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Fire:</span> {{complaintDetails?.[0]?.fire}}
+                      <span>Fire:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.fire}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Number of Injuries:</span> {{complaintDetails?.[0]?.numberOfInjuries}}
+                      <span>Number of Injuries:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.numberOfInjuries}}</span> 
                     </p>
                     <br>
                     <p>
-                      <span>Number of Deaths:</span> {{complaintDetails?.[0]?.numberOfDeaths}}
+                      <span>Number of Deaths:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.numberOfDeaths}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Summary:</span> {{complaintDetails?.[0]?.summary}}
+                      <span>Summary:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.summary}}</span> 
                     </p>
                     <br>
                     
@@ -320,26 +320,26 @@
                     }
                   }
                   @if(recalls.length !==0) {
-                  <h1  style="text-align: left;">NHTSA Campaign Number: {{recallDetails?.[0]?.NHTSACampaignNumber}} </h1>
+                  <h1  style="text-align: left;">NHTSA Campaign Number:<span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.NHTSACampaignNumber}}</span>  </h1>
                   <div class="recall-details  fade-in-fwd-detail">
                     <p>
-                      <span>Manufacturer:</span> {{recallDetails?.[0]?.Manufacturer}}
+                      <span>Manufacturer:</span> <span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Manufacturer}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Dates Received:</span> {{recallDetails?.[0]?.ReportReceivedDate}}
+                      <span>Dates Received:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.ReportReceivedDate}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Notes</span>: {{recallDetails?.[0]?.Notes}}
+                      <span>Notes</span>:<span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Notes}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Summary:</span> {{recallDetails?.[0]?.Summary}}
+                      <span>Summary:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Summary}}</span>
                     </p>
                     <br>
                     <p>
-                      <span>Remedy:</span> {{recallDetails?.[0]?.Remedy}}
+                      <span>Remedy:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Remedy}}</span>
                     </p>
                     <br>
                     
