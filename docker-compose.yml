@@ -14,8 +14,8 @@ services:
     depends_on:
       - api
    # command: nginx -g 'daemon off;'  # Start Nginx directly
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
 
   api:
     build:
@@ -28,8 +28,8 @@ services:
       - "8000:80"
     depends_on:
       - mysql
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
 
   mysql:
     image: mysql:8.0
@@ -44,8 +44,8 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
   
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -58,8 +58,8 @@ services:
       - "8888:80"
     depends_on:
       - mysql
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
 
 volumes:
   mysql-data:
