@@ -13,7 +13,7 @@ services:
     tty: true
     depends_on:
       - api
-    command: nginx -g 'daemon off;'  # Start Nginx directly
+   # command: nginx -g 'daemon off;'  # Start Nginx directly
     networks:
       - app-network
 
