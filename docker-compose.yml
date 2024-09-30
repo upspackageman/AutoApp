@@ -9,10 +9,10 @@ services:
       - "8080:80"
     # volumes:
     #   - ./angular:/usr/src/app
-    stdin_open: true
-    tty: true
-    depends_on:
-      - api
+    # stdin_open: true
+    # tty: true
+    # depends_on:
+    #   - api
    # command: nginx -g 'daemon off;'  # Start Nginx directly
     # networks:
     #   - app-network
@@ -22,8 +22,6 @@ services:
       context: ./
       dockerfile: dockerfile-api
     container_name: api
-    volumes:
-      - ./php:/var/www/html
     ports:
       - "8000:80"
     depends_on:

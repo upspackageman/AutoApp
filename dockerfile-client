@@ -24,7 +24,7 @@ RUN npm install -g @angular/cli
 COPY ./auto-client .
 
 # Build the application
-RUN npm run build --omit=dev
+RUN ng build --configuration=production
 
 # Use the official Nginx image to serve the application
 FROM nginx:latest
