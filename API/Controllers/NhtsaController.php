@@ -260,8 +260,8 @@ function getVehicleInvestigation($start, $end, $offset = 0)
 function videoPlayback($image)
 {
     $videoUrl = $image;
-    $tempWmvFile = './temp_video.wmv'; // Temporary WMV file path
-    $tempMp4File = './temp_video.mp4'; // Temporary MP4 file path
+    $tempWmvFile = '/var/www/html/tmp/temp_video.wmv'; // Temporary WMV file path
+    $tempMp4File = '/var/www/html/tmp/temp_video.mp4'; // Temporary MP4 file path
 
     // Step 1: Download the WMV file
     $ch = curl_init($videoUrl);
@@ -274,18 +274,27 @@ function videoPlayback($image)
     curl_close($ch);
 
     if ($wmvContent === false || file_put_contents($tempWmvFile, $wmvContent) === false) {
-        die('Failed to download or save WMV file.');
+        die("Failed to download or save WMV file. {$tempWmvFile}");
     }
 
     // Step 2: Convert WMV to MP4 using PHP-FFMpeg
     try {
         $ffmpeg = FFMpeg::create([
-            'ffmpeg.binaries'  => 'C:/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin/ffmpeg.exe', // Adjust path to your ffmpeg binary
-            'ffprobe.binaries' => 'C:/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin/ffprobe.exe', // Adjust path to your ffprobe binary
+            'ffmpeg.binaries'  => '/usr/bin/ffmpeg', // Adjust path to your ffmpeg binary
+            'ffprobe.binaries' => '/usr/bin/ffprobe', // Adjust path to your ffprobe binary
         ]);
+        
         $video = $ffmpeg->open($tempWmvFile);
         $format = new X264();
         $format->setAudioCodec('aac'); // Ensure audio codec is set
+
+        // Optimizations for faster conversion
+        $format->setKiloBitrate(1500); // Set bitrate (adjust as needed)
+        $format->setAdditionalParameters(['-preset', 'fast', '-threads', '4']); // Use multi-threading and a faster preset
+
+
+        // Set the desired resolution (e.g., 1280x720)
+        $format->setAdditionalParameters(['-preset', 'fast', '-threads', '4', '-vf', 'scale=1280:720']); // Set resolution and use multi-threading
         $video->save($format, $tempMp4File);
 
         // Check if the MP4 file was created
