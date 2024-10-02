@@ -1,66 +1,50 @@
-version: '3.8'
 services:
   angular:
     build:
-      context: ./
+      context: .
       dockerfile: dockerfile-client
-    container_name: angular-app
     ports:
       - "8080:80"
-    # volumes:
-    #   - ./angular:/usr/src/app
-    # stdin_open: true
-    # tty: true
-    # depends_on:
-    #   - api
-   # command: nginx -g 'daemon off;'  # Start Nginx directly
-    # networks:
-    #   - app-network
+    networks:
+      - app-network
+    depends_on:
+      - api
+    volumes:
+      - ./angular:/app
 
   api:
     build:
-      context: ./
+      context: .  # Assuming you are running from the project root
       dockerfile: dockerfile-api
     container_name: api
+    # volumes:
+    #   - ./API:/var/www/html  # Mount local PHP code for live development
     ports:
-      - "8000:80"
+      - "8000:80"             # Expose port 8000 on host to port 80 in container
     depends_on:
       - mysql
-    # networks:
-    #   - app-network
+    environment:
+      MYSQL_ROOT_PASSWORD: WAwi5697
+      # - MYSQL_USER=your_user
+      # - MYSQL_PASSWORD=your_password
+      # - MYSQL_ROOT_PASSWORD=root_password
 
   mysql:
     image: mysql:8.0
-    container_name: mysql-db
-    restart: unless-stopped
+    container_name: db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: WAwi5697
-      # MYSQL_DATABASE: ${MYSQL_DATABASE}
-      # MYSQL_USER: ${MYSQL_USER}
-      # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      # - MYSQL_USER=your_user
+      # - MYSQL_PASSWORD=your_password
+      # - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - ./mysql:/var/lib/mysql
     ports:
       - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-    # networks:
-    #   - app-network
-  
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    restart: unless-stopped
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: WAwi5697
-    ports:
-      - "8888:80"
-    depends_on:
-      - mysql
-    # networks:
-    #   - app-network
-
-volumes:
-  mysql-data:
+    networks:
+      - app-network
 
 networks:
   app-network:
+    driver: bridge

@@ -7,7 +7,7 @@ import { Visitor } from '../_models/visitor';
 })
 export class VisitorService {
 
-  private baseUrl = 'http://64.176.213.121/API/Controllers/VisitedUsersController.php';
+  private baseUrl = 'http://64.176.213.121/api/Controllers/VisitedUsersController.php';
 
   constructor(private http: HttpClient) { }
 

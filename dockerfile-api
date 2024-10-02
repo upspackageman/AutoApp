@@ -1,19 +1,22 @@
-# php-docker-file
-
-# Use the official PHP image with Apache
 FROM php:8.2-apache
+# Update the package list and install necessary packages
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    && docker-php-ext-install pdo pdo_mysql zip
 
-# Install any PHP extensions you may need
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /var/www/html
 
-# Copy the PHP files into the container
-COPY . .
+# Copy the API files
+COPY ./API /var/www/html/
 
-# Expose port 80
+# Copy Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+# Install PHP dependencies (if you have a composer.json in your API)
+RUN composer install --no-dev --no-interaction
+
+# Expose the desired port
 EXPOSE 80
-
-# Start Apache
-CMD ["apache2-foreground"]

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class AdminAuthService {
 
-  baseUrl ='http://64.176.213.121/API/Controllers/AuthController.php';
+  baseUrl ='http://64.176.213.121/api/Controllers/AuthController.php';
   private currentUserSource = new BehaviorSubject<Admin | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
 

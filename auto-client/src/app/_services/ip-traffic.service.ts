@@ -7,7 +7,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class IpTrafficService {
 
-  private trackIpUrl = 'http://64.176.213.121/API/Controllers/VisitedUsersController.php';  // Update to your PHP file URL
+  private trackIpUrl = 'http://64.176.213.121/api/Controllers/VisitedUsersController.php';  // Update to your PHP file URL
 
   constructor(private http: HttpClient,private router: Router) {
     // Subscribe to router events to detect page changes
