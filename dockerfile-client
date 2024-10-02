@@ -19,6 +19,6 @@ RUN npm run build --prod
 FROM nginx:alpine
 
 # Copy the built Angular files from the previous stage
-COPY --from=build /app/dist /usr/share/nginx/html/auto-client/browser
+COPY --from=build /app/dist /usr/share/nginx/html/
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
