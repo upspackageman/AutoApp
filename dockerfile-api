@@ -1,13 +1,18 @@
 FROM php:8.2-apache
+
 # Update the package list and install necessary packages
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libzip-dev \
+    ffmpeg \  
     && docker-php-ext-install pdo pdo_mysql zip
 
 # Set the working directory
 WORKDIR /var/www/html
+
+# Create the tmp directory in /var/www/html
+RUN mkdir -p /var/www/html/tmp && chmod -R 777 /var/www/html/tmp
 
 # Copy the API files
 COPY ./API /var/www/html/

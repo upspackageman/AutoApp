@@ -74,7 +74,7 @@ export class VehiclesComponent {
   vehicleByYears: VehicleByYearResults[] = [];
   vehicleModels: VehicleModelResults[] = [];
   vehicleCrashRatingId: VehicleCrashRatingIdResults[] = [];
-  recalls: RecallResults[] = [];
+  recalls: RecallResults[] | undefined;
   complaints: Product[] = [];
   carInspectionZip: CarInspectionZip[] = [];
   carInspectionState: CarInspectionState[] = [];
@@ -89,7 +89,7 @@ export class VehiclesComponent {
   vehicleOverallRating: any | undefined;
   overallFrontCrashRating: any | undefined;
   complaintDetails: ComplaintDetail[] | undefined;
-  recallDetails: RecallDetail[] | undefined;
+  recallDetails: RecallDetail[] =[];
   mainElement: HTMLElement | null | undefined;
   videoLink: any = '';
   vidInit: boolean = true;
@@ -136,7 +136,7 @@ export class VehiclesComponent {
 
   getBackgroundImage(imageUrl: string | undefined) {
     const altImage='https://static.nhtsa.gov/crashTest/images/2021/v10384P105.jpg';
-    console.log(imageUrl)
+    //console.log(imageUrl)
     if (imageUrl) {
       return {
         'background-image': `linear-gradient(45deg, rgb(103 97 145 / 65%) 50%, rgb(219 63 63 / 52%) 100%), url(${imageUrl})`,
@@ -215,7 +215,7 @@ export class VehiclesComponent {
   getRecallDetailsModal(id: any, templateRef: TemplateRef<any>) {
     const recall = this.recalls;
     
-    const foundItem = recall.find((item) => item?.NHTSACampaignNumber === id);
+    const foundItem = recall?.find((item) => item?.NHTSACampaignNumber === id);
     if (foundItem) {
       this.recallDetails = [foundItem].map((item) => item); // Wrap foundItem in an array to use map
       this.vehicleDetailsModal(templateRef);
@@ -311,7 +311,8 @@ export class VehiclesComponent {
     this.recallText=false;
     this.cdr.detectChanges();
 
-    const foundItem = recall.find((item) => item?.NHTSACampaignNumber === id);
+    const foundItem = recall?.find((item) => item?.NHTSACampaignNumber === id);
+    console.log(foundItem);
     if (foundItem) {
       this.cdr.detectChanges();
       this.recallDetails = [foundItem].map((item) => item); // Wrap foundItem in an array to use map
@@ -355,10 +356,13 @@ export class VehiclesComponent {
   }
 
   getRecalls(year: any, make: any, model: any) {
-    this.recalls = [];
+   
     this.nhtsaService.getRecalls(year, make, model).subscribe(
+     
       (data: Recall) => {
+        
         this.recalls = data.results;
+        
         this.recalls.sort((a, b) => {
           const dateA: any = new Date(
             a.ReportReceivedDate.split('/').reverse().join('-')
@@ -368,12 +372,17 @@ export class VehiclesComponent {
           );
           return dateB - dateA;
         });
+
         this.recalls.map((item) => {
+          const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
+          if (regex.test(item.ReportReceivedDate)) {
+            return item;
+          }
+
           const [day, month, year] = item.ReportReceivedDate.split('/');
           item.ReportReceivedDate = `${month}/${day}/${year}`;
           return item;
         });
-
       },
       (error) => {
         this.errorMessage = 'Error fetching vehicle data';
