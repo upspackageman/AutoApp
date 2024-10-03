@@ -390,6 +390,9 @@ box-shadow: 3px 5px 10px -4px rgba(0,0,0,0.75);
     margin-top:5px;
     height: 700px;
     overflow-y: scroll;
+    box-shadow: 0px -6px 5px -5px rgba(0,0,0,0.75) inset;
+-webkit-box-shadow: 0px -6px 5px -5px rgba(0,0,0,0.75) inset;
+-moz-box-shadow: 0px -6px 5px -5px rgba(0,0,0,0.75) inset;
 }
 
 
@@ -501,7 +504,70 @@ border-bottom-right-radius: .25rem;
 
 }
 
+@media (max-width:1700px) and (max-height:800px) {
+    .issue-info .issue{
+        height: 550px;
+    }
 
+    .investigation{
+        height:1500px;
+    }
+
+    .investigation .accordion-container {
+        margin-top: 5px;
+        height: 400px;
+        overflow-y: scroll;
+    }
+}
+
+@media (max-width:1600px) and (max-height:800px) {
+    .issue-info .issue{
+        height: 400px;
+    }
+
+    .investigation{
+        height:700px;
+    }
+
+    .investigation .accordion-container {
+        margin-top: 5px;
+        height: 400px;
+        overflow-y: scroll;
+    }
+}
+
+@media (max-width:1500px) and (max-height:800px) {
+    .issue-info .issue{
+        height: 400px;
+    }
+
+    .investigation{
+        height:700px;
+    }
+
+    .investigation .accordion-container {
+        margin-top: 5px;
+        height: 400px;
+        overflow-y: scroll;
+    }
+}
+
+
+@media (max-width:1400px) and (max-height:800px) {
+    .issue-info .issue{
+        height: 350px;
+    }
+
+    .investigation{
+        height:700px;
+    }
+
+    .investigation .accordion-container {
+        margin-top: 5px;
+        height: 400px;
+        overflow-y: scroll;
+    }
+}
 
 
 @media (max-width:950px) and (max-height:500px) {

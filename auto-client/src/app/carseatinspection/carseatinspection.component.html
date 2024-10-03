@@ -14,7 +14,7 @@
           <div class="item mobile">
             <mat-form-field>
               <mat-label>Select State</mat-label>
-              <mat-select (selectionChange)="carSeatInspectionLocatorByState($event.value)">
+              <mat-select (selectionChange)="carSeatInspectionLocatorByState($event.value)" matNativeControl>
                 <mat-option [value]="item" *ngFor="let item of states">{{item}}</mat-option>
               </mat-select>
               
@@ -24,8 +24,8 @@
             <mat-form-field>
               <mat-label>Select Zip</mat-label>
               <mat-select (selectionChange)="carSeatInspectionLocatorByZip($event.value)">
-                <mat-option value="999">All Zip</mat-option>
-                <mat-option [value]="item" *ngFor="let item of zipList">{{item}}</mat-option>
+                <mat-option  style="text-align:center" value="999">All</mat-option>
+                <mat-option  style="text-align:center"  [value]="item" *ngFor="let item of zipList">{{item}}</mat-option>
               </mat-select>
               
             </mat-form-field>
@@ -97,6 +97,7 @@
                             
                             <!-- <td *ngIf="!info.Email"><a *ngIf="info.Email" href="mailto:info.Email"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="email"></mat-icon></a></td> -->
 
+                            
                             @if(info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'){
                               <td>{{info.Phone1}}</td>
                               <td><a href="tel:info.Phone1"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="smartphone"></mat-icon></a></td>
@@ -129,9 +130,11 @@
                         <th></th>
                         <!-- <th>City</th>
                         <th>State</th> -->
-                        <th>Zip</th>
+                        <!-- <th>Zip</th> -->
                         <th>Email</th>
+                        <th></th>
                         <th>Phone</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let info of carInspectionZip">
@@ -139,15 +142,34 @@
                         <td class="organization">{{info.Organization}}</td>
                         <!-- <td *ngIf="info.ContactFirstName">{{info.ContactFirstName +' '+ info.ContactLastName}}</td>
                         <td *ngIf="!info.ContactFirstName">No contact name available</td> -->
-                        <td>{{info.AddressLine1+' '+info.City+' '+info.State}} </td>
+                        <td>{{info.AddressLine1+' '+info.City+' '+info.State+' '+info.Zip}} </td>
                             <td><button (click)="mapTab(info.AddressLine1, info.LastUpdatedDate, info.Organization)" ><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon></button></td>
                             <!-- <td>{{info.City}}</td>
                             <td>{{info.State}}</td>-->
-                        <td>{{info.Zip}}</td>
-                        <td *ngIf="info.Email">{{info.Email}}</td>
-                        <td *ngIf="!info.Email"><p></p>Email not available</td>
-                        <td *ngIf="info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'">No number available</td>
-                        <td *ngIf="info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'">{{info.Phone1}}</td>
+                        <!-- <td>{{info.Zip}}</td> -->
+                        @if(info.Email){
+                          <td>{{info.Email}}</td>
+                          <td><a href="mailto:info.Email"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="email"></mat-icon></a></td>
+                        }
+                       
+                        @if(!info.Email){
+                          <td ><h4>No Email available</h4> </td>
+                          <td> 
+                            <span class="not_avail">
+                              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ba005c"><path d="M404.92-469.54Zm171.7-27.08ZM804.08-70.39 694.46-180H172.31Q142-180 121-201q-21-21-21-51.31v-455.38Q100-738 121-759q21-21 51.31-21H180l60 60h-67.69q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v455.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h462.15L79.62-794.85l42.77-42.76 724.46 724.46-42.77 42.76Zm48.46-150.3L800-273.23v-389.08L563.08-510.15l-38.23-38.23 269-171.62H353.23l-60-60h494.46Q818-780 839-759q21 21 21 51.31v455.38q0 8.46-1.81 16.62-1.81 8.15-5.65 15Z"/></svg>
+                            </span>
+
+                           </td>
+                        }
+                        
+                        @if(info.Phone1 !=='00000' && info.Phone1 !=='000-000-0000' && info.Phone1 !=='0000'){
+                          <td>{{info.Phone1}}</td>
+                          <td><a href="tel:info.Phone1"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="smartphone"></mat-icon></a></td>
+                        }
+                        @if(info.Phone1 ==='00000' || info.Phone1 ==='000-000-0000' || info.Phone1 ==='0000'){
+                          <td> <h4>No number available</h4></td>
+                          <td><span class="not_avail"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="mobile_off"></mat-icon></span></td>
+                        }
   
                     </tr>
                     

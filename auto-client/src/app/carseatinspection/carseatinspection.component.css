@@ -236,6 +236,7 @@
 
 
 
+
 ::ng-deep .custom-modal .mat-mdc-dialog-surface {
     border-radius: .15rem;
     /* Adjust the border-radius as needed */
@@ -357,6 +358,9 @@
     height: 700px;
     padding-right: 50px;
     overflow-y: scroll;
+    box-shadow: 0px -6px 5px -5px rgba(0,0,0,0.75) inset;
+    -webkit-box-shadow: 0px -6px 5px -5px rgba(0,0,0,0.75) inset;
+    -moz-box-shadow: 0px -6px 5px -5px rgba(0,0,0,0.75) inset;
 
 }
 
@@ -493,6 +497,7 @@ th {
     display: none;
     height: 100%;
     z-index: 2;
+    overflow-y: auto;
     border-top-right-radius: .25rem;
     border-bottom-right-radius: .25rem;
     -webkit-box-shadow: 3px 5px 10px -4px rgba(0, 0, 0, 0.75);
@@ -501,6 +506,8 @@ th {
     -webkit-animation: scale-in-hor-left 0.15s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     animation: scale-in-hor-left 0.15s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
+
+
 
 
 
@@ -562,7 +569,39 @@ th {
 }
 
 
-@media (max-width:930px) {
+@media (max-width:1750px) and (max-height:800px) {
+    .map-location .map-body {
+        height: 550px;
+    
+    }
+}
+
+@media (max-width: 1550px) and (max-height: 800px) {
+    .map-location .map-body {
+        height: 480px;
+    }
+}
+
+
+@media (max-width: 1450px) and (max-height: 800px) {
+    .map-location .map-body {
+        height: 380px;
+    }
+
+    .car-seat .contacts {
+        height: 450px;
+    }
+}
+
+
+
+
+
+
+
+
+
+@media (max-width:1050px) {
 
     .map-mobile-body {
         height: 800px;
