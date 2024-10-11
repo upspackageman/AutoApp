@@ -1,50 +1,24 @@
-services:
-  angular:
-    build:
-      context: .
-      dockerfile: dockerfile-client
-    ports:
-      - "8080:80"
-    networks:
-      - app-network
-    depends_on:
-      - api
-    volumes:
-      - ./angular:/app
+# dockerfile-api
+# Use the official PHP 8.2 image
+FROM php:8.2-apache
 
-  api:
-    build:
-      context: .  # Assuming you are running from the project root
-      dockerfile: dockerfile-api
-    container_name: api
-    # volumes:
-    #   - ./API:/var/www/html  # Mount local PHP code for live development
-    ports:
-      - "8000:80"             # Expose port 8000 on host to port 80 in container
-    depends_on:
-      - mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: WAwi5697
-      # - MYSQL_USER=your_user
-      # - MYSQL_PASSWORD=your_password
-      # - MYSQL_ROOT_PASSWORD=root_password
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    unzip \
+    && docker-php-ext-install zip
 
-  mysql:
-    image: mysql:8.0
-    container_name: db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: WAwi5697
-      # - MYSQL_USER=your_user
-      # - MYSQL_PASSWORD=your_password
-      # - MYSQL_ROOT_PASSWORD=root_password
-    volumes:
-      - ./mysql:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    networks:
-      - app-network
+# Install Composer
+COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/composer
 
-networks:
-  app-network:
-    driver: bridge
+# Set the working directory
+WORKDIR /var/www/html
+
+# Copy the API code
+COPY API/php/ .
+
+# Install Composer dependencies
+RUN composer install
+
+# Expose port 80
+EXPOSE 80
