@@ -1,597 +1,639 @@
 <main class="vehicles">
-    <button class="detail-btn" matTooltip="Find Vehicle" mat-raised-button (click)="findVehicleModal(searchVehicle)"><mat-icon class="vehicles-icon" aria-hidden="false" aria-label="Example home icon" fontIcon="directions_car"></mat-icon><span>Find Vehicle</span></button>
-    <section class="vehicle-details" >
-     
-        <mat-tab-group class=" tab-content" >
-          
-            <mat-tab id="overview"  label="Overview"> 
-              <div class="container">
-                <div class="item mobile"> 
+  <button class="detail-btn" matTooltip="Find Vehicle" mat-raised-button (click)="findVehicleModal(searchVehicle)"><mat-icon class="vehicles-icon" aria-hidden="false" aria-label="Example home icon" fontIcon="directions_car"></mat-icon><span>Find Vehicle</span></button>
+  <section class="vehicle-details" >
+   
+      <mat-tab-group class=" tab-content" >
+        
+          <mat-tab id="overview"  label="Overview"> 
+            <div class="container">
+              <div class="item mobile"> 
+                <mat-progress-bar *ngIf="busyService.loading" mode="indeterminate"></mat-progress-bar>
+                @if(!vehicleOverallRating){
+                  <div class="no-vehicle">
+                    Please select vehicle
+                  </div>
+                }
+                @if(vehiceDescription){
+                <h1  style="text-align: left;">{{vehiceDescription}}</h1>
+                <img class="vehicle-image fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
+                @if(!vehicleImage){
+                  <h4  style="text-align: left;">Image not available</h4>
+                }
+                <button mat-raised-button class="overview-info" (click)=" getOverviewDetailsModal(safetyInfo)"> Safety Rating</button>
+                }
+                
+              </div>
+              <div class="item is-mobile">
+                @if(vehiceDescription){
+                <h1  style="text-align: left;">Safety Rating</h1>
+                <div  class="safety-details">
+                 
+                <p>
+                  Overall Rating: <span>{{vehicleCrashRating[0]?.OverallRating}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  Front Crash Rating: <span>{{vehicleCrashRating[0]?.OverallFrontCrashRating}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  Front Crash Passengerside Rating: <span>{{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  Front Crash Passengerside Rating: <span>{{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  NHTSA Electronic Stability Control: <span>{{vehicleCrashRating[0]?.NHTSAElectronicStabilityControl}}</span>  
+                </p>
+                <br>
+                <p>
+                  NHTSA Forward Collision Warning: <span>{{vehicleCrashRating[0]?.NHTSAForwardCollisionWarning}}</span> 
+                </p>
+                <br>
+                <p>
+                  NHTSA Lane Departure Warning: <span>{{vehicleCrashRating[0]?.NHTSALaneDepartureWarning}}</span> 
+                </p>
+                <br>
+                <p>
+                  Overall Side Crash Rating: <span>{{vehicleCrashRating[0]?.OverallSideCrashRating}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  RolloverPossibility: <span>{{vehicleCrashRating[0]?.RolloverPossibility}}</span> 
+                </p>
+                <br>
+                <p>
+                  Rollover Possibility: <span>{{vehicleCrashRating[0]?.RolloverPossibility2}}</span> 
+                </p>
+                <br>
+                <p>
+                  Rollover Rating: <span>{{vehicleCrashRating[0]?.RolloverRating}}</span> 
+                </p>
+
+                <!-- <br>
+                <span>
+                  Rollover Rating: {{vehicleCrashRating[0]?.RolloverRating2}}/5
+                </span>
+                <br> -->
+                <br>
+                <p>
+                  Side Crash Driverside Rating: <span>{{vehicleCrashRating[0]?.SideCrashDriversideRating}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  Side Crash Passengerside Rating: <span>{{vehicleCrashRating[0]?.SideCrashPassengersideRating}}</span> 
+                </p>
+                <br>
+                <p>
+                  Side Pole Crash Rating: <span>{{vehicleCrashRating[0]?.SidePoleCrashRating}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  Front Side Barrier And Pole Rating: <span>{{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Front']}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  Rear Side Barrier And Pole Rating: <span>{{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Rear']}}/5</span> 
+                </p>
+                <br>
+                <p>
+                  Dynamic Tip Result: <span>{{vehicleCrashRating[0]?.dynamicTipResult}}</span> 
+                </p>
+                <br>
+                <p>
+                  Overall Side Barrier Rating: <span>{{vehicleCrashRating[0]?.['sideBarrierRating-Overall']}}/5</span> 
+                </p>
+                <br>
+                </div>
+              }
+              </div>
+            </div>
+             
+          </mat-tab>
+          <mat-tab *ngIf="vehicleCrashRating[0]?.FrontCrashVideo || vehicleCrashRating[0]?.SidePoleVideo || vehicleCrashRating[0]?.SideCrashVideo" label="Crash Tests">
+            <div class="container-crash">
+              <div class="item mobile">
+                <h1  style="text-align: left;">Crash Test</h1>
+                <div class="crash-tests fade-in-fwd-detail">
+
+                    <button *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(1,vehicleCrashRating[0]?.FrontCrashVideo)">Front Crash</button>
+                    <button *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(2,vehicleCrashRating[0]?.SidePoleVideo)">Side Pole Crash</button>
+                    <button *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(3,vehicleCrashRating[0]?.SideCrashVideo)">Side Crash</button>
+                    <button  *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(1,'Front End',vehicleCrashRating[0]?.FrontCrashVideo,crash)">Front Crash</button>
+                    <button *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(3,'Side Pole',vehicleCrashRating[0]?.SidePoleVideo,crash)">Side Pole Crash</button>
+                    <button *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(2,'Side Crash',vehicleCrashRating[0]?.SideCrashVideo,crash)">Side Crash</button>
+
+                    
+                    
+                </div>
+              </div>
+              <div class="item is-mobile">
+                <div class="crash-vid-desktop">
+                @if(!videoLink && vidInit===true) {
+
+                  <div class="crash-alert" [ngStyle]="getBackgroundImage(vehicleCrashRating[0]?.SideCrashPicture)">
+                    <h2  style="text-align: left;">Select Video</h2>
+                  </div>
+                 
+                }
+
+                @if(!videoLink && vidInit===false) {
                   <mat-progress-bar *ngIf="busyService.loading" mode="indeterminate"></mat-progress-bar>
-                  @if(!vehicleOverallRating){
-                    <div class="no-vehicle">
-                      Please select vehicle
-                    </div>
-                  }
-                  @if(vehiceDescription){
-                  <h1  style="text-align: left;">{{vehiceDescription}}</h1>
-                  <img class="vehicle-image fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
-                  @if(!vehicleImage){
-                    <h4  style="text-align: left;">Image not available</h4>
-                  }
-                  <button mat-raised-button class="overview-info" (click)=" getOverviewDetailsModal(safetyInfo)"> Safety Rating</button>
-                  }
-                  
-                </div>
-                <div class="item is-mobile">
-                  @if(vehiceDescription){
-                  <h1  style="text-align: left;">Safety Rating</h1>
-                  <div  class="saftey-details">
-                   
-                  <p>
-                    Overall Rating: <span>{{vehicleCrashRating[0]?.OverallRating}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Front Crash Rating: <span>{{vehicleCrashRating[0]?.OverallFrontCrashRating}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Front Crash Passengerside Rating: <span>{{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Front Crash Passengerside Rating: <span>{{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    NHTSA Electronic Stability Control: <span>{{vehicleCrashRating[0]?.NHTSAElectronicStabilityControl}}</span>  
-                  </p>
-                  <br>
-                  <p>
-                    NHTSA Forward Collision Warning: <span>{{vehicleCrashRating[0]?.NHTSAForwardCollisionWarning}}</span> 
-                  </p>
-                  <br>
-                  <p>
-                    NHTSA Lane Departure Warning: <span>{{vehicleCrashRating[0]?.NHTSALaneDepartureWarning}}</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Overall Side Crash Rating: <span>{{vehicleCrashRating[0]?.OverallSideCrashRating}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    RolloverPossibility: <span>{{vehicleCrashRating[0]?.RolloverPossibility}}</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Rollover Possibility: <span>{{vehicleCrashRating[0]?.RolloverPossibility2}}</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Rollover Rating: <span>{{vehicleCrashRating[0]?.RolloverRating}}</span> 
-                  </p>
-
-                  <!-- <br>
-                  <span>
-                    Rollover Rating: {{vehicleCrashRating[0]?.RolloverRating2}}/5
-                  </span>
-                  <br> -->
-                  <br>
-                  <p>
-                    Side Crash Driverside Rating: <span>{{vehicleCrashRating[0]?.SideCrashDriversideRating}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Side Crash Passengerside Rating: <span>{{vehicleCrashRating[0]?.SideCrashPassengersideRating}}</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Side Pole Crash Rating: <span>{{vehicleCrashRating[0]?.SidePoleCrashRating}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Front Side Barrier And Pole Rating: <span>{{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Front']}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Rear Side Barrier And Pole Rating: <span>{{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Rear']}}/5</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Dynamic Tip Result: <span>{{vehicleCrashRating[0]?.dynamicTipResult}}</span> 
-                  </p>
-                  <br>
-                  <p>
-                    Overall Side Barrier Rating: <span>{{vehicleCrashRating[0]?.['sideBarrierRating-Overall']}}/5</span> 
-                  </p>
-                  <br>
-                  </div>
                 }
-                </div>
-              </div>
+
+                
+
                
-            </mat-tab>
-            <mat-tab *ngIf="vehicleCrashRating[0]?.FrontCrashVideo || vehicleCrashRating[0]?.SidePoleVideo || vehicleCrashRating[0]?.SideCrashVideo" label="Crash Tests">
-              <div class="container-crash">
-                <div class="item mobile">
-                  <h1  style="text-align: left;">Crash Test</h1>
-                  <div class="crash-tests fade-in-fwd-detail">
-
-                      <button *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(1,vehicleCrashRating[0]?.FrontCrashVideo)">Front Crash</button>
-                      <button *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(2,vehicleCrashRating[0]?.SidePoleVideo)">Side Pole Crash</button>
-                      <button *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(3,vehicleCrashRating[0]?.SideCrashVideo)">Side Crash</button>
-                      <button  *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(1,'Front End',vehicleCrashRating[0]?.FrontCrashVideo,crash)">Front Crash</button>
-                      <button *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(3,'Side Pole',vehicleCrashRating[0]?.SidePoleVideo,crash)">Side Pole Crash</button>
-                      <button *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(2,'Side Crash',vehicleCrashRating[0]?.SideCrashVideo,crash)">Side Crash</button>
-
-                      
-                      
-                  </div>
-                </div>
-                <div class="item is-mobile">
-                  <div class="crash-vid-desktop">
-                  @if(!videoLink && vidInit===true) {
-
-                    <div class="crash-alert" [ngStyle]="getBackgroundImage(vehicleCrashRating[0]?.SideCrashPicture)">
-                      <h2  style="text-align: left;">Select Video</h2>
+                  @if(videoLink && videoLink !== 'DENIED') {
+                    <video #videoPlayer  width="100%" height="100%" controls>
+                      <source [src]="videoLink"  type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video>
+                    <div class="test-description">
+                      <h3 *ngIf="frontCrash">
+                        Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier approximately 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
+                      </h3>
+                      <h3 *ngIf="sideCrash">
+                        Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier approximately 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
+                      </h3>
+                      <h3 *ngIf="sidePoleCrash">
+                        Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole approximately 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
+                      </h3>
                     </div>
-                   
                   }
-
-                  @if(!videoLink && vidInit===false) {
-                    <mat-progress-bar *ngIf="busyService.loading" mode="indeterminate"></mat-progress-bar>
+                  @if(videoLink && videoLink === 'DENIED'){
+                    <div class="crash-alert" [ngStyle]="getBackgroundImage(vehicleCrashRating[0]?.SidePolePicture)">
+                      <h2  style="text-align: left;">Video Not Available</h2>
+                    </div>
+                    <div class="test-description">
+                      <h3 *ngIf="frontCrash">
+                        Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier at 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
+                      </h3>
+                      <h3 *ngIf="sideCrash">
+                        Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier at 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
+                      </h3>
+                      <h3 *ngIf="sidePoleCrash">
+                        Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole at 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
+                      </h3>
+                    </div>
                   }
-
-                  
-
-                 
-                    @if(videoLink && videoLink !== 'DENIED') {
-                      <video #videoPlayer  width="100%" height="100%" controls>
-                        <source [src]="videoLink"  type="video/mp4">
-                        Your browser does not support the video tag.
-                      </video>
-                      <div class="test-description">
-                        <h3 *ngIf="frontCrash">
-                          Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier approximately 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
-                        </h3>
-                        <h3 *ngIf="sideCrash">
-                          Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier approximately 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
-                        </h3>
-                        <h3 *ngIf="sidePoleCrash">
-                          Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole approximately 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
-                        </h3>
-                      </div>
-                    }
-                    @if(videoLink && videoLink === 'DENIED'){
-                      <div class="crash-alert" [ngStyle]="getBackgroundImage(vehicleCrashRating[0]?.SidePolePicture)">
-                        <h2  style="text-align: left;">Video Not Available</h2>
-                      </div>
-                      <div class="test-description">
-                        <h3 *ngIf="frontCrash">
-                          Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier at 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
-                        </h3>
-                        <h3 *ngIf="sideCrash">
-                          Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier at 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
-                        </h3>
-                        <h3 *ngIf="sidePoleCrash">
-                          Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole at 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
-                        </h3>
-                      </div>
-                    }
-                  </div>
-                   
-                   
-
                 </div>
+                 
+                 
+
               </div>
-                
-             
-            </mat-tab>
-            <mat-tab label="Complaints">
-              <div class="container">
-                <div class="item mobile">
-                
-                  @if(complaints.length !==0){
+            </div>
+              
+           
+          </mat-tab>
+          <mat-tab label="Complaints">
+            <div class="container">
+              <div class="item mobile">
+              
+                @if(complaints.length !==0 ){
+                  <div class="mobile-layout-header">
                     <h1  style="text-align: left;">Complaints</h1>
-                  }
+                    <button class="filter-btn" mat-raised-button [matMenuTriggerFor]="menu">{{selectedComplaintComponents!==''?selectedComplaintComponents:"All COMPONENTS"}}</button>
+                    <mat-menu  #menu="matMenu" >
+                      <button  (click)='filterComplaintsByComponents("")' mat-menu-item>All Components</button>
+                      <button  *ngFor="let item of complaintComponents" (click)='filterComplaintsByComponents(item)' mat-menu-item>{{item}}</button>
+                     
+                    </mat-menu>
+                  </div>
+                  
+                }
+               
+                <div class="complaints fade-in-fwd-detail">
                  
-                  <div class="complaints fade-in-fwd-detail">
-                   
-                    @if(complaints.length ===0){
-                      <h3>No Complaints Available</h3>
-                    }
-                    @if(complaints.length !==0){
-                    <ul  *ngFor="let complaint of complaints">
-                      <button mat-raised-button class="is-mobile fade-in-fwd-detail" (click)="getComplaintDetails(complaint.odiNumber)"> {{complaint.dateComplaintFiled}}</button>
-                      <button mat-raised-button class="desktop" (click)="getComplaintDetailsModal(complaint.odiNumber,complaintInfo)"> {{complaint.dateComplaintFiled}}</button>
-                    </ul>
-                  }
-                    
-                    
-                  </div>
                   @if(complaints.length ===0){
-                    <!-- <div> -->
-                      <!-- <h3>No Complaints Available</h3>
-                    </div> -->
-                    @if(vehiceDescription){
-                     
-                      <img class="vehicle-image desktop fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
-                      
-                    }
+                    <h3>No Complaints Available</h3>
                   }
-                </div>
-                <div class="item is-mobile">
-                  @if(complaints.length ===0){
-                    
-                    @if(vehiceDescription){
-                     
-                      <img class="vehicle-image is-mobile fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
-                      
-                    }
-                  }
-                  @if(complaints.length !==0){
-                  <h1  style="text-align: left;">Complaint Number: <span  [ngClass]="{'complaintText': complaintText, 'complaintTextFadeOut': ! complaintText}" >{{complaintDetails?.[0]?.odiNumber}}</span> </h1>
-                  <div class="complaint-details fade-in-fwd-detail">
-                    <p>
-                      <span>Manufacturer:</span> <span  [ngClass]="{'complaintText': complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.manufacturer}}</span> 
-                    </p>
-                    <br>
-                    <p>
-                      <span>Components:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.components}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>VIN:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.vin}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Date of Incident:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.dateOfIncident}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Date Filed:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.dateComplaintFiled}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Fire:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.fire}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Number of Injuries:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.numberOfInjuries}}</span> 
-                    </p>
-                    <br>
-                    <p>
-                      <span>Number of Deaths:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.numberOfDeaths}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Summary:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.summary}}</span> 
-                    </p>
-                    <br>
-                    
-                   
-                  </div>
+                  @if(complaints.length !==0 && filteredComplaintComponents.length ===0){
+                  <ul  *ngFor="let complaint of complaints">
+                    <button mat-raised-button class="is-mobile fade-in-fwd-detail" (click)="getComplaintDetails(complaint.odiNumber)"> {{complaint.dateComplaintFiled}}</button>
+                    <button mat-raised-button class="desktop" (click)="getComplaintDetailsModal(complaint.odiNumber,complaintInfo)"> {{complaint.dateComplaintFiled}}</button>
+                  </ul>
                 }
+
+                @if( filteredComplaintComponents.length !==0){
+                  <ul  *ngFor="let complaint of filteredComplaintComponents">
+                    <button mat-raised-button class="is-mobile fade-in-fwd-detail" (click)="getComplaintDetails(complaint.odiNumber)"> {{complaint.dateComplaintFiled}}</button>
+                    <button mat-raised-button class="desktop" (click)="getComplaintDetailsModal(complaint.odiNumber,complaintInfo)"> {{complaint.dateComplaintFiled}}</button>
+                  </ul>
+                }
+                  
+                  
                 </div>
+                @if(complaints.length ===0){
+                  <!-- <div> -->
+                    <!-- <h3>No Complaints Available</h3>
+                  </div> -->
+                  @if(vehiceDescription){
+                   
+                    <img class="vehicle-image desktop fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
+                    
+                  }
+                }
               </div>
-                
-             
-            </mat-tab>
-            <mat-tab label="Recalls">
-              <div class="container">
-                <div class="item mobile">
-                  @if(recalls.length !==0){
+              <div class="item is-mobile">
+                @if(complaints.length ===0){
+                  
+                  @if(vehiceDescription){
+                   
+                    <img class="vehicle-image is-mobile fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
+                    
+                  }
+                }
+                @if(complaints.length !==0){
+                <h1  style="text-align: left;">Complaint Number: <span  [ngClass]="{'complaintText': complaintText, 'complaintTextFadeOut': ! complaintText}" >{{complaintDetails?.[0]?.odiNumber}}</span> </h1>
+                <div class="complaint-details fade-in-fwd-detail">
+                  <p>
+                    <span>Manufacturer:</span> <span  [ngClass]="{'complaintText': complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.manufacturer}}</span> 
+                  </p>
+                  <br>
+                  <p>
+                    <span>Components:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.components}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>VIN:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.vin}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Date of Incident:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.dateOfIncident}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Date Filed:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.dateComplaintFiled}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Fire:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.fire}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Number of Injuries:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.numberOfInjuries}}</span> 
+                  </p>
+                  <br>
+                  <p>
+                    <span>Number of Deaths:</span>  <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.numberOfDeaths}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Summary:</span> <span [ngClass]="{'complaintText':  complaintText, 'complaintTextFadeOut': ! complaintText}" >  {{complaintDetails?.[0]?.summary}}</span> 
+                  </p>
+                  <br>
+                  
+                 
+                </div>
+              }
+              </div>
+            </div>
+              
+           
+          </mat-tab>
+          <mat-tab label="Recalls">
+            <div class="container">
+              <div class="item mobile">
+                @if(recalls.length !==0){
+                  <div class="mobile-layout-header">
                     <h1  style="text-align: left;">Recalls</h1>
-                  }
-                  <div class="recalls fade-in-fwd-detail">
-                   
-                    @if(recalls.length !==0){
-                     
-                    <ul *ngFor="let recall of recalls">
-                      <button mat-raised-button class="is-mobile fade-in-fwd-detail" (click)="getRecallDetails(recall.NHTSACampaignNumber)">{{recall.ReportReceivedDate}}</button>
-                      <button  mat-raised-button class="desktop" (click)="getRecallDetailsModal(recall.NHTSACampaignNumber, recallInfo)">{{recall.ReportReceivedDate}}</button>
-                    </ul>
-                  }
-                  @if(recalls.length ===0){
-                    <h3>No Recalls Available</h3>
-                  }
+                    <button class="filter-btn" mat-raised-button [matMenuTriggerFor]="menu">{{selectedRecallComponents!==''?selectedRecallComponents:"All COMPONENTS"}}</button>
+                      <mat-menu  #menu="matMenu" >
+                        <button  (click)='filterRecallsByComponents("")' mat-menu-item>All Components</button>
+                        <button  *ngFor="let item of recallComponents" (click)='filterRecallsByComponents(item)' mat-menu-item>{{item}}</button>
+                       
+                      </mat-menu>
                   </div>
-                  @if(recalls.length ===0){
-                    <!-- <div>
-                      <h3>No Recalls Available</h3>
-                    </div> -->
-                    @if(vehiceDescription){
-                      
-                      <img class="vehicle-image desktop fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
-                      
-                    }
-                  }
-                </div>
-                <div class="item is-mobile">
-                  @if(recalls.length ===0){
-                    <!-- <div>
-                      <h3>No Recalls Available</h3>
-                    </div> -->
-                    @if(vehiceDescription){
-                      
-                      <img class="vehicle-image  fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
-                      
-                    }
-                  }
-                  @if(recalls.length !==0) {
-                  <h1  style="text-align: left;">NHTSA Campaign Number:<span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.NHTSACampaignNumber}}</span>  </h1>
-                  <div class="recall-details  fade-in-fwd-detail">
-                    <p>
-                      <span>Manufacturer:</span> <span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Manufacturer}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Dates Received:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.ReportReceivedDate}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Notes</span>:<span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Notes}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Summary:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Summary}}</span>
-                    </p>
-                    <br>
-                    <p>
-                      <span>Remedy:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Remedy}}</span>
-                    </p>
-                    <br>
-                    
-                  </div>
+                  
                 }
-                 </div>
+                <div class="recalls fade-in-fwd-detail">
+                 
+                  @if(recalls.length !==0 && filteredRecallComponents.length===0){
+                   
+                  <ul *ngFor="let recall of recalls">
+                    <button mat-raised-button class="is-mobile fade-in-fwd-detail" (click)="getRecallDetails(recall.NHTSACampaignNumber)">{{recall.ReportReceivedDate}}</button>
+                    <button  mat-raised-button class="desktop" (click)="getRecallDetailsModal(recall.NHTSACampaignNumber, recallInfo)">{{recall.ReportReceivedDate}}</button>
+                  </ul>
+                }
+
+                @if(filteredRecallComponents.length!==0){
+                   
+                  <ul *ngFor="let recall of filteredRecallComponents">
+                    <button mat-raised-button class="is-mobile fade-in-fwd-detail" (click)="getRecallDetails(recall.NHTSACampaignNumber)">{{recall.ReportReceivedDate}}</button>
+                    <button  mat-raised-button class="desktop" (click)="getRecallDetailsModal(recall.NHTSACampaignNumber, recallInfo)">{{recall.ReportReceivedDate}}</button>
+                  </ul>
+                }
+
+
+                @if(recalls.length ===0){
+                  <h3>No Recalls Available</h3>
+                }
+                </div>
+                @if(recalls.length ===0){
+                  <!-- <div>
+                    <h3>No Recalls Available</h3>
+                  </div> -->
+                  @if(vehiceDescription){
+                    
+                    <img class="vehicle-image desktop fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
+                    
+                  }
+                }
               </div>
-            </mat-tab>
-          </mat-tab-group>
-    </section>
-    
+              <div class="item is-mobile">
+                @if(recalls.length ===0){
+                  <!-- <div>
+                    <h3>No Recalls Available</h3>
+                  </div> -->
+                  @if(vehiceDescription){
+                    
+                    <img class="vehicle-image  fade-in-fwd" onerror="this.onerror=null; this.src='../../img/car-image.png'" [src]="vehicleImage"/>
+                    
+                  }
+                }
+                @if(recalls.length !==0) {
+                <h1  style="text-align: left;">NHTSA Campaign Number:<span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.NHTSACampaignNumber}}</span>  </h1>
+                <div class="recall-details  fade-in-fwd-detail">
+                  <p>
+                    <span>Manufacturer:</span> <span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Manufacturer}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Components:</span> <span [ngClass]="{'complaintText':  recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Component}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Dates Received:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.ReportReceivedDate}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Notes</span>:<span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Notes}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Summary:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Summary}}</span>
+                  </p>
+                  <br>
+                  <p>
+                    <span>Remedy:</span><span  [ngClass]="{'complaintText': recallText, 'complaintTextFadeOut': ! recallText}" >  {{recallDetails?.[0]?.Remedy}}</span>
+                  </p>
+                  <br>
+                  
+                </div>
+              }
+               </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+  </section>
+  
 </main>
 
 <ng-template #crash>
-  <section class="crash-modal">
+<section class="crash-modal">
 <div class="crash-header">
-  <button class="crash-close"mat-flat-button (click)="closeDialog()">Close</button>
-  <h2>{{crashHeader}}</h2>
+<button class="crash-close"mat-flat-button (click)="closeDialog()">Close</button>
+<h2>{{crashHeader}}</h2>
 </div>
- 
-  @if(!videoLink && vidInit===true) {
-    <h1  style="text-align: left;">Select Video</h1>
-  }
 
-  @if(!videoLink && vidInit===false) {
-    <mat-progress-bar *ngIf="busyService.loading" mode="indeterminate"></mat-progress-bar>
-  }
+@if(!videoLink && vidInit===true) {
+  <h1  style="text-align: left;">Select Video</h1>
+}
 
-  
-  <div class="safety-vid-mobile">
-    @if(videoLink && videoLink !== 'DENIED') {
-      <div class="vid-load">
-        <video width="100%" height="100%" controls>
-          <source [src]="videoLink"  type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-        <div class="test-description">
-          <h3 *ngIf="frontCrash">
-            Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier at 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
-          </h3>
-          <h3 *ngIf="sideCrash">
-            Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier at 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
-          </h3>
-          <h3 *ngIf="sidePoleCrash">
-            Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole at 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
-          </h3>
-        </div>
+@if(!videoLink && vidInit===false) {
+  <mat-progress-bar *ngIf="busyService.loading" mode="indeterminate"></mat-progress-bar>
+}
+
+
+<div class="safety-vid-mobile">
+  @if(videoLink && videoLink !== 'DENIED') {
+    <div class="vid-load">
+      <video width="100%" height="100%" controls>
+        <source [src]="videoLink"  type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="test-description">
+        <h3 *ngIf="frontCrash">
+          Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier at 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
+        </h3>
+        <h3 *ngIf="sideCrash">
+          Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier at 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
+        </h3>
+        <h3 *ngIf="sidePoleCrash">
+          Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole at 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
+        </h3>
       </div>
-     
-    }
-    @if(videoLink && videoLink === 'DENIED'){
-      <div class="vid-load">
-        <div class="crash-alert" [ngStyle]="getBackgroundImage(vehicleCrashRating[0]?.SidePolePicture)">
-          <h2  style="text-align: left;">Video Not Available</h2>
-        </div>
-        <div class="test-description">
-          <h3 *ngIf="frontCrash">
-            Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier at 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
-          </h3>
-          <h3 *ngIf="sideCrash">
-            Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier at 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
-          </h3>
-          <h3 *ngIf="sidePoleCrash">
-            Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole at 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
-          </h3>
-        </div>
-      </div>
-      
-    }
     </div>
-  </section>
+   
+  }
+  @if(videoLink && videoLink === 'DENIED'){
+    <div class="vid-load">
+      <div class="crash-alert" [ngStyle]="getBackgroundImage(vehicleCrashRating[0]?.SidePolePicture)">
+        <h2  style="text-align: left;">Video Not Available</h2>
+      </div>
+      <div class="test-description">
+        <h3 *ngIf="frontCrash">
+          Front crash test for the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is driven into a fixed barrier at 35 mph (56 km/h) to simulate a frontal collision. This test is a crucial part of NHTSA's New Car Assessment Program (NCAP) and provides a detailed look at how the {{vehicleCrashRating[0]?.Model}}'s safety features and structural design perform in protecting occupants during a crash.
+        </h3>
+        <h3 *ngIf="sideCrash">
+          Side crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} conducted by the National Highway Traffic Safety Administration (NHTSA). The vehicle is struck by a moving barrier at 38.5 mph (62 km/h) to simulate a side impact collision. This test, part of NHTSA's New Car Assessment Program (NCAP), demonstrates how the {{vehicleCrashRating[0]?.Model}}’s side impact protection features, including side airbags and structural reinforcements, perform in safeguarding occupants during a side crash.
+        </h3>
+        <h3 *ngIf="sidePoleCrash">
+          Side pole crash test of the {{vehicleCrashRating[0]?.Make +' '+vehicleCrashRating[0]?.Model}} performed by the National Highway Traffic Safety Administration (NHTSA). The vehicle is hit by a rigid, vertical pole at 20 mph (32 km/h) to simulate a severe side impact, such as colliding with a utility pole. This test, part of NHTSA's New Car Assessment Program (NCAP), evaluates the effectiveness of the {{vehicleCrashRating[0]?.Model}}'s side impact protection systems and structural integrity in protecting occupants during such high-impact collisions.
+        </h3>
+      </div>
+    </div>
+    
+  }
+  </div>
+</section>
 </ng-template>
 
 <ng-template #searchVehicle>
-    <div class="findVehicle">
-        <button class="close"mat-flat-button (click)="closeDialog()">Close</button>
+  <div class="findVehicle">
+      <button class="close"mat-flat-button (click)="closeDialog()">Close</button>
+      <mat-form-field class="form-field">
+          <mat-label>Year</mat-label>
+          <mat-select (selectionChange)="getVehiclesByYear($event)" >
+            <mat-option [value]="year" *ngFor="let year of years">{{year}}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <mat-form-field class="form-field">
-            <mat-label>Year</mat-label>
-            <mat-select (selectionChange)="getVehiclesByYear($event)" >
-              <mat-option [value]="year" *ngFor="let year of years">{{year}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="form-field">
-            <mat-label>Make</mat-label>
-            <mat-select (selectionChange)="getVehicleModel($event)">
-              <mat-option [value]="vehicle" *ngFor="let vehicle of vehicleByYears">{{vehicle.Make}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="form-field">
-            <mat-label>Model</mat-label>
-            <mat-select (selectionChange)="loadVehicleInfo($event)" >
-              <mat-option [value]="vehicle" *ngFor="let vehicle of vehicleModels">{{vehicle.Model}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <!-- <mat-form-field class="form-field">
-            <mat-label>Vehicle(s)</mat-label>
-            <mat-select>
-              <mat-option value="one">First option</mat-option>
-              <mat-option value="two">Second option</mat-option>
-            </mat-select>
-          </mat-form-field> -->
-          <!-- <button mat-raised-button class="detail-btn" >Get Vehicle</button> -->
-    </div>
+          <mat-label>Make</mat-label>
+          <mat-select (selectionChange)="getVehicleModel($event)">
+            <mat-option [value]="vehicle" *ngFor="let vehicle of vehicleByYears">{{vehicle.Make}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Model</mat-label>
+          <mat-select (selectionChange)="loadVehicleInfo($event)" >
+            <mat-option [value]="vehicle" *ngFor="let vehicle of vehicleModels">{{vehicle.Model}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <mat-form-field class="form-field">
+          <mat-label>Vehicle(s)</mat-label>
+          <mat-select>
+            <mat-option value="one">First option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <!-- <button mat-raised-button class="detail-btn" >Get Vehicle</button> -->
+  </div>
 </ng-template>
 
 
 
 <ng-template #complaintInfo>
 <div class="main-modal-header">
-  <button class="close"  mat-flat-button  (click)="closeDialog()">Close</button>
-  <h1 class="vehicle-modal-details-header"  style="text-align: left;">Complaint Number: {{complaintDetails?.[0]?.odiNumber}} </h1>
+<button class="close"  mat-flat-button  (click)="closeDialog()">Close</button>
+<h1 class="vehicle-modal-details-header"  style="text-align: left;">Complaint Number: {{complaintDetails?.[0]?.odiNumber}} </h1>
 </div>
-  <hr>
+<hr>
 <div class="vehicle-modal-details">
-   
-    
-  <span class="prop">Manufacturer:</span>  <br> <span> {{complaintDetails?.[0]?.manufacturer}}   </span>
  
-    <br>
-    <br>
-    <span class="prop">Components:</span>  <br> <span> {{complaintDetails?.[0]?.components}} </span> 
-    
-    <br>
-    <br>
-    <span class="prop">VIN:</span><span> {{complaintDetails?.[0]?.vin}}</span>
-    
-    <br>
-    <br>
-    <span class="prop">Date of Incident:</span> <span> {{complaintDetails?.[0]?.dateOfIncident}}</span>
-    <br>
-    <br>
-    <span class="prop">Date Filed:</span> <span> {{complaintDetails?.[0]?.dateComplaintFiled}}</span>
-    <br>
-    <br>
-    <span class="prop">Fire:</span> <span> {{complaintDetails?.[0]?.fire}}</span>
-    <br>
-    <br>
-    <span class="prop">Number of Injuries</span> <span> {{complaintDetails?.[0]?.numberOfInjuries}} </span>
-    <br>
-    <br>
-    <span class="prop">Number of Deaths:</span> <span> {{complaintDetails?.[0]?.numberOfDeaths}}</span>
-    <br>
-    <br>
-    <span class="prop">Summary:</span> <br> <span> {{complaintDetails?.[0]?.summary}}</span>
-    <br>
-    <br>
-    
-   
-  </div>
+  
+<span class="prop">Manufacturer:</span>  <br> <span> {{complaintDetails?.[0]?.manufacturer}}   </span>
+
+  <br>
+  <br>
+  <span class="prop">Components:</span>  <br> <span> {{complaintDetails?.[0]?.components}} </span> 
+  
+  <br>
+  <br>
+  <span class="prop">VIN:</span><span> {{complaintDetails?.[0]?.vin}}</span>
+  
+  <br>
+  <br>
+  <span class="prop">Date of Incident:</span> <span> {{complaintDetails?.[0]?.dateOfIncident}}</span>
+  <br>
+  <br>
+  <span class="prop">Date Filed:</span> <span> {{complaintDetails?.[0]?.dateComplaintFiled}}</span>
+  <br>
+  <br>
+  <span class="prop">Fire:</span> <span> {{complaintDetails?.[0]?.fire}}</span>
+  <br>
+  <br>
+  <span class="prop">Number of Injuries</span> <span> {{complaintDetails?.[0]?.numberOfInjuries}} </span>
+  <br>
+  <br>
+  <span class="prop">Number of Deaths:</span> <span> {{complaintDetails?.[0]?.numberOfDeaths}}</span>
+  <br>
+  <br>
+  <span class="prop">Summary:</span> <br> <span> {{complaintDetails?.[0]?.summary}}</span>
+  <br>
+  <br>
+  
+ 
+</div>
 </ng-template>
 
 
 <ng-template #recallInfo>
-  <div class="main-modal-header">
-    <button class="close" mat-flat-button (click)="closeDialog()">Close</button>
-  <h1 class="vehicle-modal-details-header"  style="text-align: left;">NHTSA Campaign Number: {{recallDetails?.[0]?.NHTSACampaignNumber}} </h1>
-  </div>
+<div class="main-modal-header">
+  <button class="close" mat-flat-button (click)="closeDialog()">Close</button>
+<h1 class="vehicle-modal-details-header"  style="text-align: left;">NHTSA Campaign Number: {{recallDetails?.[0]?.NHTSACampaignNumber}} </h1>
+</div>
+
+<div class="vehicle-modal-details">
+  <span class="prop">Manufacturer:</span><br> <span> {{recallDetails?.[0]?.Manufacturer}} </span>
+  <br>
+  <br>
+  <span class="prop">Components:</span>  <br> <span> {{recallDetails?.[0]?.Component}} </span> 
+  <br>
+  <br>
+  <span class="prop">Dates Received:</span> <span> {{recallDetails?.[0]?.ReportReceivedDate}}</span>
+  <br>
+  <br>
+  <span class="prop">Notes:</span> <br><span> {{recallDetails?.[0]?.Notes}}</span>
+  <br>
+  <br>
+  <span class="prop">Summary:</span><br> <span> {{recallDetails?.[0]?.Summary}}</span>
+  <br>
+  <br>
+  <span class="prop">Remedy:</span> {{recallDetails?.[0]?.Remedy}} <br><span></span>
+  <br>
+  <br>
   
-  <div class="vehicle-modal-details">
-    <span class="prop">Manufacturer:</span><br> <span> {{recallDetails?.[0]?.Manufacturer}} </span>
-    <br>
-    <br>
-    <span class="prop">Dates Received:</span> <span> {{recallDetails?.[0]?.ReportReceivedDate}}</span>
-    <br>
-    <br>
-    <span class="prop">Notes:</span> <br><span> {{recallDetails?.[0]?.Notes}}</span>
-    <br>
-    <br>
-    <span class="prop">Summary:</span><br> <span> {{recallDetails?.[0]?.Summary}}</span>
-    <br>
-    <br>
-    <span class="prop">Remedy:</span> {{recallDetails?.[0]?.Remedy}} <br><span></span>
-    <br>
-    <br>
-    
-  </div>
+</div>
 </ng-template>
 
 
 <ng-template #safetyInfo>
-  <div class="main-modal-header">
-    <button mat-flat-button  class="close" (click)="closeDialog()">Close</button>
-    <h1 class="vehicle-modal-details-header"  style="text-align: left;">Safety Rating</h1>
-  </div>
-  
-  <div class="vehicle-modal-details">
-  <span  class="prop2">Overall Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.OverallRating}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Front Crash Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.OverallFrontCrashRating}}</span>
-  <br>
-  <br>
-  <span  class="prop2">Front Crash Passengerside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}</span>
-  <br>
-  <br>
-  <span  class="prop2">Front Crash Passengerside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}</span>
-  <br>
-  <br>
-  <span  class="prop2">NHTSA Electronic Stability Control:</span><span class="prop2a">{{vehicleCrashRating[0]?.NHTSAElectronicStabilityControl}}</span>
-  <br>
-  <br>
-  <span  class="prop2">NHTSA Forward Collision Warning:</span><span class="prop2a"> {{vehicleCrashRating[0]?.NHTSAForwardCollisionWarning}}</span>
-  <br>
-  <br>
-  <span  class="prop2">NHTSA Lane Departure Warning:</span><span class="prop2a"> {{vehicleCrashRating[0]?.NHTSALaneDepartureWarning}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Overall Side Crash Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.OverallSideCrashRating}}</span>
-  <br>
-  <br>
-  <span  class="prop2">RolloverPossibility:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverPossibility}}</span>
-  <br>
-  <br>
-  <span  class="prop2">Rollover Possibility:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverPossibility2}}</span>
-  <br>
-  <br>
-  <span  class="prop2">Rollover Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverRating}}</span>
-  <br>
-  <br>
-  <span  class="prop2">Rollover Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverRating2}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Side Crash Driverside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.SideCrashDriversideRating}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Side Crash Passengerside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.SideCrashPassengersideRating}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2"> Side Pole Crash Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.SidePoleCrashRating}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Front Side Barrier And Pole Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Front']}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Rear Side Barrier And Pole Rating</span><span class="prop2a"> {{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Rear']}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Dynamic Tip Result:</span> <span class="prop2a">{{vehicleCrashRating[0]?.dynamicTipResult}}
-  </span>
-  <br>
-  <br>
-  <span  class="prop2">Overall Side Barrier Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.['sideBarrierRating-Overall']}}
-  </span>
-  <br>
-  <br>
-  </div>
+<div class="main-modal-header">
+  <button mat-flat-button  class="close" (click)="closeDialog()">Close</button>
+  <h1 class="vehicle-modal-details-header"  style="text-align: left;">Safety Rating</h1>
+</div>
+
+<div class="vehicle-modal-details">
+<span  class="prop2">Overall Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.OverallRating}}
+</span>
+<br>
+<br>
+<span  class="prop2">Front Crash Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.OverallFrontCrashRating}}</span>
+<br>
+<br>
+<span  class="prop2">Front Crash Passengerside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}</span>
+<br>
+<br>
+<span  class="prop2">Front Crash Passengerside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.FrontCrashPassengersideRating}}</span>
+<br>
+<br>
+<span  class="prop2">NHTSA Electronic Stability Control:</span><span class="prop2a">{{vehicleCrashRating[0]?.NHTSAElectronicStabilityControl}}</span>
+<br>
+<br>
+<span  class="prop2">NHTSA Forward Collision Warning:</span><span class="prop2a"> {{vehicleCrashRating[0]?.NHTSAForwardCollisionWarning}}</span>
+<br>
+<br>
+<span  class="prop2">NHTSA Lane Departure Warning:</span><span class="prop2a"> {{vehicleCrashRating[0]?.NHTSALaneDepartureWarning}}
+</span>
+<br>
+<br>
+<span  class="prop2">Overall Side Crash Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.OverallSideCrashRating}}</span>
+<br>
+<br>
+<span  class="prop2">RolloverPossibility:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverPossibility}}</span>
+<br>
+<br>
+<span  class="prop2">Rollover Possibility:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverPossibility2}}</span>
+<br>
+<br>
+<span  class="prop2">Rollover Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverRating}}</span>
+<br>
+<br>
+<span  class="prop2">Rollover Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.RolloverRating2}}
+</span>
+<br>
+<br>
+<span  class="prop2">Side Crash Driverside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.SideCrashDriversideRating}}
+</span>
+<br>
+<br>
+<span  class="prop2">Side Crash Passengerside Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.SideCrashPassengersideRating}}
+</span>
+<br>
+<br>
+<span  class="prop2"> Side Pole Crash Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.SidePoleCrashRating}}
+</span>
+<br>
+<br>
+<span  class="prop2">Front Side Barrier And Pole Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Front']}}
+</span>
+<br>
+<br>
+<span  class="prop2">Rear Side Barrier And Pole Rating</span><span class="prop2a"> {{vehicleCrashRating[0]?.['combinedSideBarrierAndPoleRating-Rear']}}
+</span>
+<br>
+<br>
+<span  class="prop2">Dynamic Tip Result:</span> <span class="prop2a">{{vehicleCrashRating[0]?.dynamicTipResult}}
+</span>
+<br>
+<br>
+<span  class="prop2">Overall Side Barrier Rating:</span><span class="prop2a"> {{vehicleCrashRating[0]?.['sideBarrierRating-Overall']}}
+</span>
+<br>
+<br>
+</div>
 </ng-template>

@@ -1,27 +1,50 @@
-FROM php:8.2-apache
+services:
+  angular:
+    build:
+      context: .
+      dockerfile: dockerfile-client
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    depends_on:
+      - api
+    volumes:
+      - ./angular:/app
 
-# Update the package list and install necessary packages
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    ffmpeg \  
-    && docker-php-ext-install pdo pdo_mysql zip
+  api:
+    build:
+      context: .  # Assuming you are running from the project root
+      dockerfile: dockerfile-api
+    container_name: api
+    # volumes:
+    #   - ./API:/var/www/html  # Mount local PHP code for live development
+    ports:
+      - "8000:80"             # Expose port 8000 on host to port 80 in container
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: WAwi5697
+      # - MYSQL_USER=your_user
+      # - MYSQL_PASSWORD=your_password
+      # - MYSQL_ROOT_PASSWORD=root_password
 
-# Set the working directory
-WORKDIR /var/www/html
+  mysql:
+    image: mysql:8.0
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: WAwi5697
+      # - MYSQL_USER=your_user
+      # - MYSQL_PASSWORD=your_password
+      # - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
 
-# Create the tmp directory in /var/www/html
-RUN mkdir -p /var/www/html/tmp && chmod -R 777 /var/www/html/tmp
-
-# Copy the API files
-COPY ./API /var/www/html/
-
-# Copy Composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-
-# Install PHP dependencies (if you have a composer.json in your API)
-RUN composer install --no-dev --no-interaction
-
-# Expose the desired port
-EXPOSE 80
+networks:
+  app-network:
+    driver: bridge

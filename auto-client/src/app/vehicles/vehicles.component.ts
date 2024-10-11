@@ -48,6 +48,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BusyService } from '../_services/busy.service';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-vehicles',
@@ -64,6 +65,7 @@ import { ChangeDetectorRef } from '@angular/core';
     MatSelectModule,
     MatGridListModule,
     MatProgressBarModule,
+    MatMenuModule
   ],
   templateUrl: './vehicles.component.html',
   styleUrl: './vehicles.component.css',
@@ -74,7 +76,7 @@ export class VehiclesComponent {
   vehicleByYears: VehicleByYearResults[] = [];
   vehicleModels: VehicleModelResults[] = [];
   vehicleCrashRatingId: VehicleCrashRatingIdResults[] = [];
-  recalls: RecallResults[] | undefined;
+  recalls: RecallResults[]=[];
   complaints: Product[] = [];
   carInspectionZip: CarInspectionZip[] = [];
   carInspectionState: CarInspectionState[] = [];
@@ -100,7 +102,15 @@ export class VehiclesComponent {
   sidePoleCrash:boolean=false;
   complaintText:boolean =false;
   recallText:boolean=false;
- 
+  complaintComponents:any[]=[];
+  recallComponents:any[]=[];
+  filteredComplaintComponents:any[]=[];
+  selectedComplaintComponents:any='';
+  filteredRecallComponents:any[]=[];
+  selectedRecallComponents:any='';
+
+
+
   constructor(
     private nhtsaService: NhtsaService,
     public dialog: MatDialog,
@@ -192,6 +202,10 @@ export class VehiclesComponent {
     const year = vehicle.value.ModelYear;
     const make = vehicle.value.Make;
     const model = vehicle.value.Model;
+    this.selectedComplaintComponents ='';
+    this.selectedRecallComponents='';
+    this.filteredComplaintComponents=[];
+    this.filteredRecallComponents=[];
     this.videoLink = '';
     this.vidInit = true;
     this.getComplaints(year, make, model);
@@ -327,6 +341,7 @@ export class VehiclesComponent {
     console.log(this.complaintText)
     this.cdr.detectChanges();
     const foundItem = complaint.filter((item) => id === item.odiNumber);
+    
     if (foundItem) {
       this.cdr.detectChanges();
       this.complaintDetails =[];
@@ -336,11 +351,33 @@ export class VehiclesComponent {
     }
   }
 
+  filterComplaintsByComponents(val:any){
+    this.filteredComplaintComponents=[];
+    this.selectedComplaintComponents=val;
+    this.cdr.detectChanges();
+    const check = this.complaints;
+    if(val===''){
+      return;
+    }
+    this.filteredComplaintComponents = check.filter(item => 
+      item.components.includes(val) // Access the correct property
+    );
+    console.log(this.filteredComplaintComponents);
+  }
+
   getComplaints(year: any, make: any, model: any) {
     this.complaints = [];
+    this.complaintComponents =[];
     this.nhtsaService.getComplaints(year, make, model).subscribe(
       (data: Complaint) => {
         this.complaints = data.results;
+        this.complaintComponents = data.results;
+        this.complaintComponents =  Array.from(new Set(this.complaintComponents.flat().map(item => item.components))).sort();
+        
+        console.log(this.complaintComponents);
+        this.complaintComponents = this.complaintComponents.flatMap(item => item.split(','));
+        this.complaintComponents =  Array.from(new Set(this.complaintComponents));
+        this.complaintComponents = this.complaintComponents.sort();
 
         this.complaints.sort((a, b) => {
           const dateA: any = new Date(a.dateComplaintFiled);
@@ -355,13 +392,32 @@ export class VehiclesComponent {
     );
   }
 
+  filterRecallsByComponents(val:any){
+    this.selectedRecallComponents=val;
+    this.filteredRecallComponents=[];
+    const check = this.recalls;
+    this.cdr.detectChanges();
+    this.filteredRecallComponents = check.filter(item => 
+      item.Component.includes(val) // Access the correct property
+    );
+    console.log(this.filteredRecallComponents);
+  }
+
   getRecalls(year: any, make: any, model: any) {
-   
+    this.recalls =[];
+    this.recallComponents =[];
     this.nhtsaService.getRecalls(year, make, model).subscribe(
      
       (data: Recall) => {
         
         this.recalls = data.results;
+
+        this.recallComponents = data.results;
+       this.recallComponents =  this.recallComponents.map(item => item.Component);
+        this.recallComponents = this.recallComponents.flatMap(item => item.split(','));
+        this.recallComponents =  Array.from(new Set(this.recallComponents)).sort();
+        this.recallComponents = this.recallComponents.sort();
+        console.log(this.recallComponents);
         
         this.recalls.sort((a, b) => {
           const dateA: any = new Date(

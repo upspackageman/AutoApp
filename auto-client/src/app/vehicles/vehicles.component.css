@@ -139,6 +139,7 @@
     -webkit-animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 	        animation: fade-in-left 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
     animation-delay: .2s;
+    line-height: 1.5;
     color: #201a1b !important;
     font-weight: 400 !important;
 }
@@ -331,6 +332,17 @@ div.mat-mdc-select-panel .mat-mdc-option {
     border-radius: .5rem;
 }
 
+.filter-btn{
+    left: 0px;
+    border-radius: .5rem;
+    background:  linear-gradient(45deg, rgb(241, 120, 120) 5%, rgb(150, 60, 60) 20%, rgb(190, 62, 62) 40%, rgb(235, 95, 95) 65%, rgb(148, 17, 17) 80%,  rgb(246, 120, 120) 90%,rgb(208, 55, 55) 100%) !important;
+    color: #fff !important;
+}
+
+.filter-btn-mobile{
+    display: none;
+}
+
 
 .vehicles .detail-btn:hover {
     background: linear-gradient(45deg, rgb(231 218 218) 20%, rgb(255, 255, 255) 100%);
@@ -344,7 +356,6 @@ div.mat-mdc-select-panel .mat-mdc-option {
     width: 100%;
     height: auto;
     opacity: 1;
-
 }
 
 .vehicles .vehicles-icon {
@@ -352,16 +363,22 @@ div.mat-mdc-select-panel .mat-mdc-option {
 }
 
 
-.vehicles .saftey-details {
+.vehicles .safety-details {
     height: 500px;
     overflow-y: scroll;
+    padding: 10px 10px 10px 10px;
+    border-radius: .2rem;
+    background: rgb(255, 255, 255, 0.3);
+    box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.3);
+    -webkit-box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.3);
+    -moz-box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.3);
 }
 
-.vehicles .saftey-details p{
+.vehicles .safety-details p{
     margin: 0px;
 }
 
-.vehicles .saftey-details span{
+.vehicles .safety-details span{
     color:#ba0000;
 }
 
@@ -382,6 +399,13 @@ div.mat-mdc-select-panel .mat-mdc-option {
 .vehicles .complaints {
     max-height: 500px;
     overflow-y: scroll;
+    margin-top: 20px;
+}
+
+
+.vehicles .complaints  button{
+    left:-35px;
+    align-items: center;
 }
 
 
@@ -397,6 +421,12 @@ div.mat-mdc-select-panel .mat-mdc-option {
 .vehicles .complaint-details {
     height: 500px;
     overflow-y: scroll;
+    padding: 10px 10px 10px 10px;
+    border-radius: .2rem;
+    background: rgb(255, 255, 255, 0.65);
+    box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.65);
+    -webkit-box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.65);
+    -moz-box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.65);
 }
 
 .vehicles .complaint-details p{
@@ -413,11 +443,13 @@ div.mat-mdc-select-panel .mat-mdc-option {
 .vehicles .recalls {
     max-height: 500px;
     overflow-y: scroll;
+    margin-top: 20px;
 }
 
 
 .vehicles .recalls button {
     border-radius: .25rem;
+    left: -35px;
 }
 
 .vehicles .recalls button:hover {
@@ -427,6 +459,12 @@ div.mat-mdc-select-panel .mat-mdc-option {
 .vehicles .recall-details {
     height: 500px;
     overflow-y: scroll;
+    padding: 10px 10px 10px 10px;
+    border-radius: .2rem;
+    background: rgb(255, 255, 255, 0.65);
+    box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.65);
+    -webkit-box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.65);
+    -moz-box-shadow: 2px 1px 5px 9px rgb(255, 255, 255, 0.65);
 }
 
 .vehicles .recall-details p {
@@ -488,6 +526,11 @@ div.mat-mdc-select-panel .mat-mdc-option {
 @media (max-width:850px) {
     .vehicles {
         padding-bottom: 700px;
+    }
+
+    .mobile-layout-header{
+        display: inline-grid;
+        justify-content: center;
     }
 
     .crash-modal {
@@ -600,6 +643,7 @@ div.mat-mdc-select-panel .mat-mdc-option {
         border-block-end: #000a;
         height: calc(100% - 200px) !important;
         overflow-y: scroll;
+        text-overflow: ellipsis;
     }
 
     .vehicle-modal-details .prop {
@@ -654,6 +698,11 @@ div.mat-mdc-select-panel .mat-mdc-option {
         max-height: 700px;
     }
 
+    .vehicles .recalls button {
+        border-radius: .25rem;
+        left: 0px;
+    }
+
 
 
     .vehicles .item h1, ul {
@@ -663,6 +712,11 @@ div.mat-mdc-select-panel .mat-mdc-option {
     .vehicles {
         background-position: center;
         background-repeat: no-repeat;
+    }
+
+    .vehicles .complaints button {
+        left: 0px;
+        align-items: center;
     }
 
     .vehicles .item ul button {
@@ -694,13 +748,15 @@ div.mat-mdc-select-panel .mat-mdc-option {
     .findVehicle .close {
         margin-left: 80%;
     }
-
-
 }
 
 @media (max-width:450px) {
     .vehicles {
         padding-bottom: 100px;
+    }
+
+    .filter-btn {
+        font-size: .65rem;
     }
 
     .safety-vid-mobile .test-description h3 {
@@ -755,6 +811,10 @@ div.mat-mdc-select-panel .mat-mdc-option {
     .vehicles {
         padding-bottom: 250px;
     }
+
+    .filter-btn {
+        font-size: .7rem;
+    }
 }
 
 
@@ -776,6 +836,11 @@ div.mat-mdc-select-panel .mat-mdc-option {
     .vehicles .complaints {
 
         max-height: 300px;
+    }
+
+    .main-modal-header .close {
+        margin-left: 68.5%;
+        margin-top: 2.5%;
     }
 
 }

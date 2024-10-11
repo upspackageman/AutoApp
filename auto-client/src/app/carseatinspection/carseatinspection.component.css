@@ -480,7 +480,8 @@ th, td {
 }
 
 th {
-
+    font-weight: 500;
+    letter-spacing: .8px;
     background-color: rgba(242, 242, 242, 0);
 }
 
