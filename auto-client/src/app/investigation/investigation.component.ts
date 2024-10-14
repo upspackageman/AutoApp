@@ -146,8 +146,8 @@ export class InvestigationComponent {
   }
 
   async getModalDoc(templateRef: TemplateRef<any>, url: any) {
-    
     (await this.nhtsaService.getPdfData(url)).subscribe(
+      
       (objectUrl)=>{
         this.pdfUrl = objectUrl;
         this.cdr.detectChanges();
@@ -171,6 +171,8 @@ export class InvestigationComponent {
 
     
   }
+
+  
 
 dateChange() {
     this.init=false;

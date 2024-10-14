@@ -146,7 +146,7 @@ export class VehiclesComponent {
 
   getBackgroundImage(imageUrl: string | undefined) {
     const altImage='https://static.nhtsa.gov/crashTest/images/2021/v10384P105.jpg';
-    //console.log(imageUrl)
+    
     if (imageUrl) {
       return {
         'background-image': `linear-gradient(45deg, rgb(103 97 145 / 65%) 50%, rgb(219 63 63 / 52%) 100%), url(${imageUrl})`,
@@ -190,7 +190,6 @@ export class VehiclesComponent {
     
       this.videoLink = objectUrl;
 
-     console.log(objectUrl);
     
     });
 
@@ -326,7 +325,6 @@ export class VehiclesComponent {
     this.cdr.detectChanges();
 
     const foundItem = recall?.find((item) => item?.NHTSACampaignNumber === id);
-    console.log(foundItem);
     if (foundItem) {
       this.cdr.detectChanges();
       this.recallDetails = [foundItem].map((item) => item); // Wrap foundItem in an array to use map
@@ -338,7 +336,6 @@ export class VehiclesComponent {
    
     const complaint = this.complaints;
     this.complaintText = false;
-    console.log(this.complaintText)
     this.cdr.detectChanges();
     const foundItem = complaint.filter((item) => id === item.odiNumber);
     
@@ -347,7 +344,6 @@ export class VehiclesComponent {
       this.complaintDetails =[];
       this.complaintDetails = foundItem.map((item) => item); // Wrap foundItem in an array to use map
       this.complaintText = true;
-      console.log(this.complaintText)
     }
   }
 
@@ -362,7 +358,6 @@ export class VehiclesComponent {
     this.filteredComplaintComponents = check.filter(item => 
       item.components.includes(val) // Access the correct property
     );
-    console.log(this.filteredComplaintComponents);
   }
 
   getComplaints(year: any, make: any, model: any) {
@@ -374,7 +369,6 @@ export class VehiclesComponent {
         this.complaintComponents = data.results;
         this.complaintComponents =  Array.from(new Set(this.complaintComponents.flat().map(item => item.components))).sort();
         
-        console.log(this.complaintComponents);
         this.complaintComponents = this.complaintComponents.flatMap(item => item.split(','));
         this.complaintComponents =  Array.from(new Set(this.complaintComponents));
         this.complaintComponents = this.complaintComponents.sort();
@@ -400,7 +394,6 @@ export class VehiclesComponent {
     this.filteredRecallComponents = check.filter(item => 
       item.Component.includes(val) // Access the correct property
     );
-    console.log(this.filteredRecallComponents);
   }
 
   getRecalls(year: any, make: any, model: any) {
@@ -417,7 +410,7 @@ export class VehiclesComponent {
         this.recallComponents = this.recallComponents.flatMap(item => item.split(','));
         this.recallComponents =  Array.from(new Set(this.recallComponents)).sort();
         this.recallComponents = this.recallComponents.sort();
-        console.log(this.recallComponents);
+
         
         this.recalls.sort((a, b) => {
           const dateA: any = new Date(

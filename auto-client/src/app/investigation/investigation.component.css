@@ -278,7 +278,14 @@ box-shadow: 3px 5px 10px -4px rgba(0,0,0,0.75);
 
 }
 
+::ng-deep .mat-mdc-menu-panel::-webkit-scrollbar{
+    width:5px;
+    background-color: #aa97a04d;
+}
 
+::ng-deep .mat-mdc-menu-panel::-webkit-scrollbar-thumb{
+    background-color:#ba005c;
+}
 
 ::ng-deep .mdc-line-ripple::before {
     border-color: rgb(154, 29, 29) !important;
@@ -363,6 +370,12 @@ box-shadow: 3px 5px 10px -4px rgba(0,0,0,0.75);
 }
 
 
+.header h3{
+    font-weight: 500;
+  
+}
+
+
 .header hr{
     border-width: .1rem;
     border-color: rgb(154, 29, 29);
@@ -397,11 +410,17 @@ box-shadow: 3px 5px 10px -4px rgba(0,0,0,0.75);
 
 
 .investigation .accordion-container::-webkit-scrollbar {
+    border-radius: .8px;
+    width: 3px;
+    background-color: rgba(255, 255, 255, .5);
+}
+
+
+.investigation .accordion-container:hover::-webkit-scrollbar {
     border-radius: 6.8px;
     width: 8px;
     background-color: rgba(255, 255, 255, .5);
 }
-
 
 .investigation .accordion-container::-webkit-scrollbar-thumb {
     border-radius: 6.8px;
@@ -413,9 +432,28 @@ box-shadow: 3px 5px 10px -4px rgba(0,0,0,0.75);
 .investigation .accordion-container::-webkit-scrollbar-thumb:hover {
     cursor:pointer;
 }
+.issue h3,h4{
+    font-weight: 500;
+    color: #5f0c0c;
+}
+
+.issue  hr{
+    background-color: #bd0000;
+    height: 1px;
+}
 
 
  .issue::-webkit-scrollbar {
+    border-radius: .8px;
+    width: 3px;
+    background-color: rgb(237, 237, 237);
+}
+
+.issue-attr{
+    font-weight: 500;
+}
+
+.issue:hover::-webkit-scrollbar {
     border-radius: 6.8px;
     width: 8px;
     background-color: rgb(237, 237, 237);

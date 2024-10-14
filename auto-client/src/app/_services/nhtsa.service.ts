@@ -62,7 +62,7 @@ export class NhtsaService {
     .pipe(
       map((blob: Blob) => {
         // Create an Object URL from the Blob
-          console.log(blob.type);
+        //  console.log(blob.type);
          if( blob.type!=='video/mp4'){
           return 'DENIED'
          }

@@ -171,7 +171,7 @@
                       {{ formatDate2(item.dateOpened) }}
                     </mat-panel-title>
                     <mat-panel-title class="manufactuer">
-                      {{ item.associatedProducts[0].manufacturer }}
+                      {{ item.associatedProducts[0]?.manufacturer }}
                     </mat-panel-title>
 
                     <mat-panel-title>
@@ -199,11 +199,11 @@
                     </button>
                     <mat-menu #vdocs>
                      
-                      <ng-container *ngFor="let _item of item.associatedDocuments">
+                      <ng-container  *ngFor="let _item of item.associatedDocuments">
                         <a
                           *ngIf="checkFileFormat(_item.url)"
-                          mat-menu-item
                           (click)="getModalDoc(doc, _item.url)"
+                          mat-menu-item
                           matTooltip="{{_item.summary}}"
                           [matTooltipPosition]="position.value!"
                           rel="noopener noreferrer"
@@ -341,9 +341,9 @@
       <h3>Components</h3>
       <hr />
       <div *ngFor="let item of issueAssociatedCom">
-        <span>Name: </span><span>{{ item.name }}</span
+        <span class="issue-attr">Name: </span><span>{{ item.name }}</span
         ><br />
-        <span>Description: </span><span>{{ item.description }}</span
+        <span class="issue-attr">Description: </span><span>{{ item.description }}</span
         ><br />
         <br />
       </div>
@@ -352,16 +352,16 @@
       <h3>Associate Products</h3>
       <hr />
       <div *ngFor="let item of issueAssociatedProd">
-        <span>Manufacturer: </span
+        <span class="issue-attr">Manufacturer: </span
         ><span>{{ item.manufacturer }}</span
         ><br />
-        <span>Year: </span><span>{{ item.productYear }}</span
+        <span class="issue-attr">Year: </span><span>{{ item.productYear }}</span
         ><br />
-        <span>Make: </span><span>{{ item.productMake }}</span
+        <span class="issue-attr">Make: </span><span>{{ item.productMake }}</span
         ><br />
-        <span>Model: </span><span>{{ item.productModel }}</span
+        <span class="issue-attr">Model: </span><span>{{ item.productModel }}</span
         ><br />
-        <span>Type: </span><span>{{ item.type }}</span
+        <span class="issue-attr">Type: </span><span>{{ item.type }}</span
         ><br /><br />
       </div>
     </div>
