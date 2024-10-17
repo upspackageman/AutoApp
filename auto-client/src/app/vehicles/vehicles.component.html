@@ -2,7 +2,7 @@
   <button class="detail-btn" matTooltip="Find Vehicle" mat-raised-button (click)="findVehicleModal(searchVehicle)"><mat-icon class="vehicles-icon" aria-hidden="false" aria-label="Example home icon" fontIcon="directions_car"></mat-icon><span>Find Vehicle</span></button>
   <section class="vehicle-details" >
    
-      <mat-tab-group class=" tab-content" >
+      <mat-tab-group class=" tab-content"  [(selectedIndex)]="activeTabIndex">
         
           <mat-tab id="overview"  label="Overview"> 
             <div class="container">

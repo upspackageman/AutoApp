@@ -30,6 +30,10 @@ class User {
        
         $stmt = $this->getUserByLogin($login);
         
+        if ($stmt === false) {
+            // If statement preparation fails, return false or handle the error
+            return false;
+        }
        
 
         if ($result = $stmt->get_result()) {

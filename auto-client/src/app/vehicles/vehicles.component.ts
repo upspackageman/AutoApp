@@ -108,6 +108,7 @@ export class VehiclesComponent {
   selectedComplaintComponents:any='';
   filteredRecallComponents:any[]=[];
   selectedRecallComponents:any='';
+  activeTabIndex:any=0;
 
 
 
@@ -207,12 +208,13 @@ export class VehiclesComponent {
     this.filteredRecallComponents=[];
     this.videoLink = '';
     this.vidInit = true;
+    
     this.getComplaints(year, make, model);
     this.getRecalls(year, make, model);
     this.getVehicleCrashRatingId(year, make, model);
-
-    document.getElementById('mat-tab-label-0-0')?.click();
-    document.getElementById('mat-tab-label-0-0')?.click();
+    this.activeTabIndex=0;
+    // document.getElementById('mat-tab-label-0-0')?.click();
+    // document.getElementById('mat-tab-label-0-0')?.click();
 
     this.closeDialog();
   }
@@ -319,13 +321,13 @@ export class VehiclesComponent {
   }
 
   getRecallDetails(id: any) {
-    
     const recall = this.recalls;
     this.recallText=false;
     this.cdr.detectChanges();
 
     const foundItem = recall?.find((item) => item?.NHTSACampaignNumber === id);
     if (foundItem) {
+      this.recallDetails=[];
       this.cdr.detectChanges();
       this.recallDetails = [foundItem].map((item) => item); // Wrap foundItem in an array to use map
       this.recallText=true;
@@ -333,15 +335,15 @@ export class VehiclesComponent {
   }
 
   getComplaintDetails(id: any) {
-   
     const complaint = this.complaints;
     this.complaintText = false;
     this.cdr.detectChanges();
     const foundItem = complaint.filter((item) => id === item.odiNumber);
     
     if (foundItem) {
-      this.cdr.detectChanges();
+     
       this.complaintDetails =[];
+      this.cdr.detectChanges();
       this.complaintDetails = foundItem.map((item) => item); // Wrap foundItem in an array to use map
       this.complaintText = true;
     }
@@ -367,8 +369,9 @@ export class VehiclesComponent {
       (data: Complaint) => {
         this.complaints = data.results;
         this.complaintComponents = data.results;
+        this.getComplaintDetails(this.complaintComponents[0].odiNumber);
         this.complaintComponents =  Array.from(new Set(this.complaintComponents.flat().map(item => item.components))).sort();
-        
+       
         this.complaintComponents = this.complaintComponents.flatMap(item => item.split(','));
         this.complaintComponents =  Array.from(new Set(this.complaintComponents));
         this.complaintComponents = this.complaintComponents.sort();
@@ -378,6 +381,7 @@ export class VehiclesComponent {
           const dateB: any = new Date(b.dateComplaintFiled);
           return dateB - dateA;
         });
+       
       },
       (error) => {
         this.errorMessage = 'Error fetching vehicle data';
@@ -406,6 +410,7 @@ export class VehiclesComponent {
         this.recalls = data.results;
 
         this.recallComponents = data.results;
+        this.getRecallDetails(this.recallComponents[0].NHTSACampaignNumber);
        this.recallComponents =  this.recallComponents.map(item => item.Component);
         this.recallComponents = this.recallComponents.flatMap(item => item.split(','));
         this.recallComponents =  Array.from(new Set(this.recallComponents)).sort();

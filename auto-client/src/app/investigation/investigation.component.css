@@ -209,6 +209,7 @@
 
 .investigation .manufactuer{
     width:800px;
+    font-weight: 400;
 }
 
 .investigation .inspect{
@@ -743,7 +744,7 @@ border-bottom-right-radius: .25rem;
     }
     .investigation .mobile-title-panel{
         font-size:.8rem;
-        font-weight: 400;
+        /* font-weight: 400; */
     }
 
     .investigation .selection button {
