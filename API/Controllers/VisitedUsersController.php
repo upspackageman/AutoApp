@@ -65,7 +65,7 @@ function geolocationIP($ip){
         'verify' => false, // Disable SSL verification
     ]);
 
-
+    ob_start();
     try {
         // Make a GET request to the API endpoint
         $response = $client->request('GET', $apiUrl);
@@ -83,6 +83,7 @@ function geolocationIP($ip){
         header('Content-Type: application/json');
         echo json_encode(['error' => $e->getMessage()]);
     }
+    ob_end_flush();
 }
 
 function getVisitors(){

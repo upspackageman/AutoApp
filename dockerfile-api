@@ -2,12 +2,13 @@
 # Use the official PHP 8.2 image
 FROM php:8.2-apache
 
-# Install system dependencies and FFmpeg
+# Install system dependencies, FFmpeg, and mysqli
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     ffmpeg \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip mysqli pdo pdo_mysql \
+    && docker-php-ext-enable mysqli
 
 # Install Composer
 COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/composer

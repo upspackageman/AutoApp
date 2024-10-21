@@ -5,9 +5,9 @@ require '../vendor/autoload.php'; // Ensure Composer's autoloader is included
 
 
 class Database {
-    private $servername = "localhost";
+    private $servername = "mysql";
     private $username = "root";
-    private $password = "KickMe5697";
+    private $password = "WAwi5697";
     private $dbname = "auto_complaints";
     public $conn;
 
