@@ -1,0 +1,51 @@
+.cookie{
+    background:  linear-gradient(60deg, rgba(253, 251, 251, 0.906), rgba(255, 255, 255, 0.88)),url('https://images.unsplash.com/photo-1519752235002-1f7189299e90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+}
+
+.policy-section{
+    padding:100px 40px 100px 40px;
+}
+
+.policy-section h1, h2,h3, strong{
+    font-weight: 500;
+    color: #9f0909;
+}
+
+.policy-section strong{
+    color: #760909 !important;
+}
+
+.policy-section li{
+    list-style: none;
+    margin-bottom: 8px;
+}
+
+.contact-section{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px 10px 40px;
+    justify-content: center;
+    background: #fff;
+} 
+
+.contact-section h2{
+    text-align: center;
+}
+
+.contact-section a{
+    width: 50%;
+    margin-left: 25%;
+}
+
+.thank-you{
+    margin-top: 5%;
+    font-size: 2rem;
+    display: grid;
+    justify-content: center;
+}
+
+
+::ng-deep .mat-mdc-dialog-surface {
+    background-color: #fff !important;
+}

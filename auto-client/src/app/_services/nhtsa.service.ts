@@ -17,7 +17,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class NhtsaService {
   baseUrl =
-    'http://64.176.213.121/api/Controllers/NhtsaController.php';
+    'http://45.32.71.33/api/Controllers/NhtsaController.php';
 
   vidCache = new Map();
   pdfCache = new Map();

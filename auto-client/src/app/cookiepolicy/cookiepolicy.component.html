@@ -1,0 +1,193 @@
+<main class="cookie">
+<section class="policy-section">
+    <h1>Cookie and Local Storage Policy</h1>
+
+    <p>
+      This Cookie and Local Storage Policy outlines how Auto-Complaints.com uses cookies and local storage technologies to enhance your experience
+      on our website. It explains what cookies and local storage are, how we use
+      them, and your choices regarding their use.
+    </p>
+  
+    <h2>What are Cookies?</h2>
+    <p>
+      Cookies are small text files stored on your device by your web browser when
+      you visit a website. They enable the website to remember your actions and
+      preferences (such as login information and language preferences) over time.
+    </p>
+  
+    <h2>What is Local Storage?</h2>
+    <p>
+      Local storage is a web storage feature that allows web applications to store
+      data persistently in the user’s browser. It is similar to cookies but can
+      hold larger amounts of data (up to 5MB or more depending on the browser).
+      Data stored in local storage remains even after the browser is closed.
+    </p>
+  
+    <h2>Types of Cookies We Use</h2>
+    <p>We use the following types of cookies on our website:</p>
+    <ul>
+      <li>
+        <strong>Essential Cookies</strong>: These cookies are necessary for the
+        website to function properly. They enable basic functionalities such as
+        page navigation and access to secure areas of the website.
+      </li>
+      <li>
+        <strong>Performance Cookies</strong>: These cookies collect information
+        about how visitors use our website, such as which pages are visited most
+        often and if users receive error messages. This data helps us improve the
+        website's performance.
+      </li>
+      <li>
+        <strong>Functional Cookies</strong>: These cookies allow our website to
+        remember choices you make (such as your username, language, or region) and
+        provide enhanced, more personalized features.
+      </li>
+      <li>
+        <strong>Targeting/Advertising Cookies</strong>: These cookies are used to
+        deliver advertisements that are relevant to you and your interests. They
+        are also used to limit the number of times you see an advertisement and
+        help measure the effectiveness of advertising campaigns.
+      </li>
+    </ul>
+  
+    <h2>How We Use Local Storage</h2>
+    <p>We use local storage for the following purposes:</p>
+    <ul>
+      <li>
+        <strong>Storing User Preferences</strong>: We may store user preferences
+        and settings to improve your experience on our website.
+      </li>
+      <li>
+        <strong>Session Management</strong>: Local storage may be used to manage
+        user sessions and keep you logged in between visits.
+      </li>
+      <li>
+        <strong>Analytics and Performance</strong>: We may use local storage to
+        collect analytics data to understand how users interact with our website
+        and improve our services.
+      </li>
+    </ul>
+  
+    <h2>Your Choices</h2>
+    <h3>Cookies:</h3>
+    <ul>
+      <li>
+        <strong>Consent</strong>: By using our website, you consent to the use of
+        cookies as described in this policy. You can manage your cookie
+        preferences through your browser settings.
+      </li>
+      <li>
+        <strong>Opt-Out</strong>: You can choose to opt out of cookies by
+        adjusting your browser settings. Note that disabling cookies may affect
+        your experience on our website.
+      </li>
+    </ul>
+  
+    <h3>Local Storage:</h3>
+    <ul>
+      <li>
+        <strong>Control</strong>: You can control local storage through your
+        browser settings. Most modern browsers allow you to clear local storage or
+        block specific sites from using it.
+      </li>
+    </ul>
+  
+    <h2>Data Retention</h2>
+    <p>
+      We will retain cookie and local storage data for as long as necessary to
+      fulfill the purposes for which it was collected, or as required by
+      applicable laws.
+    </p>
+  
+    <h2>Security</h2>
+    <p>
+      We take reasonable measures to protect the information collected through
+      cookies and local storage. However, please note that no method of
+      transmission over the Internet or method of electronic storage is 100%
+      secure.
+    </p>
+  
+    <h2>Changes to This Policy</h2>
+    <p>
+      We may update this Cookie and Local Storage Policy from time to time. We
+      will notify you of any changes by posting the new policy on our website with
+      an updated effective date.
+    </p>
+  
+    <h2>Contact Us</h2>
+    <p>
+      If you have any questions about this Cookie and Local Storage Policy, please contact us.
+     
+    </p>
+    <p><a mat-raised-button (click)="contact(contactFormTemplate)">Contact</a></p>
+</section>
+  
+</main>
+
+<!-- <button mat-button (click)="closeDialog()" >Close</button> -->
+
+<ng-template #contactFormTemplate>
+  <form class="contact-section">
+    <mat-dialog-actions>
+      <button mat-button type="button" (click)="closeDialog()" cdkFocusInitial>Close</button>
+    </mat-dialog-actions>
+    <h2>Contact</h2>
+    <mat-error *ngIf="contactForm.get('firstName')?.invalid || contactForm.get('firstName')?.minLength"> 
+      <span>First name is required.</span>
+  </mat-error>
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input matInput (input)="firstNameFormatter($event)">
+    </mat-form-field>
+
+    <mat-error *ngIf="contactForm.get('lastName')?.invalid"> 
+      <span>Last name is required.</span>
+  </mat-error>
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input matInput (input)="lastNameFormatter($event)">
+    </mat-form-field>
+    <mat-error>
+      <span *ngIf="contactForm.get('email')?.errors?.['required']">Email is required.</span>
+      <span *ngIf="contactForm.get('email')?.errors?.['email']">Enter a valid email.</span>
+    </mat-error>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput (input)="emailFormatter($event)">
+      
+    </mat-form-field>
+    <mat-error *ngIf="contactForm.get('phone')?.invalid ">
+      <span *ngIf="contactForm.get('phone')?.errors?.['required']">Phone number is required.</span>
+      <span *ngIf="contactForm.get('phone')?.errors?.['pattern']">Enter a valid phone number (format: (xxx) xxx-xxxx).</span>
+    </mat-error>
+    <mat-form-field>
+      <mat-label>Phone Number</mat-label>
+      <input matInput [formControl]="contactForm.get('phone')" (input)="formatPhoneNumber($event)" maxlength="14">
+    </mat-form-field>
+
+    <mat-error *ngIf="contactForm.get('message')?.invalid">
+      <span *ngIf="contactForm.get('message')?.errors?.['required']">Message is required.</span>
+      <span *ngIf="contactForm.get('message')?.errors?.['minlength']">Message must be at least 10 characters long.</span>
+    </mat-error>
+    <mat-form-field>
+      <mat-label>Textarea</mat-label>
+      <textarea matInput [formControl]="contactForm.get('message')" (input)="messageFormatter($event)"></textarea>
+      
+    </mat-form-field>
+  
+    <a mat-raised-button (click)="send(contactThankYou)"  *ngIf="formValid()">Send</a>
+  </form>
+  
+
+</ng-template>
+
+
+
+<ng-template #contactThankYou>
+  <mat-dialog-actions>
+    <button mat-button type="button" (click)="closeDialog()" cdkFocusInitial>Close</button>
+  </mat-dialog-actions>
+  <section class="thank-you">
+    <h2>Thank You!</h2>
+  </section>
+</ng-template>

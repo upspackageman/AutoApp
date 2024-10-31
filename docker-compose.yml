@@ -28,6 +28,7 @@ services:
       # - MYSQL_USER=your_user
       # - MYSQL_PASSWORD=your_password
       # - MYSQL_ROOT_PASSWORD=root_password
+    cpuset: "1"
     networks:
       - app-network
 
