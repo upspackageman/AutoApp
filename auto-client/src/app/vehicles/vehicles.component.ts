@@ -49,6 +49,8 @@ import { BusyService } from '../_services/busy.service';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-vehicles',
@@ -65,7 +67,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSelectModule,
     MatGridListModule,
     MatProgressBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './vehicles.component.html',
   styleUrl: './vehicles.component.css',
@@ -73,6 +76,7 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class VehiclesComponent {
   years: any[] = [];
+  shutdown:boolean =false;
   vehicleByYears: VehicleByYearResults[] = [];
   vehicleModels: VehicleModelResults[] = [];
   vehicleCrashRatingId: VehicleCrashRatingIdResults[] = [];
@@ -109,6 +113,7 @@ export class VehiclesComponent {
   filteredRecallComponents:any[]=[];
   selectedRecallComponents:any='';
   activeTabIndex:any=0;
+  isVidLoading:boolean=false;
 
 
 
@@ -166,6 +171,7 @@ export class VehiclesComponent {
   }
 
   async loadCrashVideo( crashType:number,image: string) {
+    this.isVidLoading=true;
     this.videoLink = null;
     this.frontCrash=false;
     this.sideCrash=false;
@@ -185,16 +191,15 @@ export class VehiclesComponent {
     
     (await this.nhtsaService.getVideoPlayback(image)).subscribe((objectUrl) => {
 
-
-      this.cdr.detectChanges();
-
     
       this.videoLink = objectUrl;
+      this.isVidLoading=false;
+      this.cdr.detectChanges();
 
-    
     });
 
     this.videoPlayer?.nativeElement.load();
+   
   }
 
   loadVehicleInfo(vehicle: any) {

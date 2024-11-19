@@ -1,3 +1,6 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
+<div class="policy" *ngIf="!ipTrafficService.policy" >
+    <h4>We use cookies to improve your experience on our site and offer you relevant information. <a   routerLink="/policy">Learn more</a></h4>  <button (click)="policyAcknowledge()" mat-raised-button>OK.</button>
+</div>
 <app-footer></app-footer >

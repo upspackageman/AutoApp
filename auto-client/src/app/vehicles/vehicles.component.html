@@ -112,18 +112,19 @@
             </div>
              
           </mat-tab>
-          <mat-tab *ngIf="vehicleCrashRating[0]?.FrontCrashVideo || vehicleCrashRating[0]?.SidePoleVideo || vehicleCrashRating[0]?.SideCrashVideo" label="Crash Tests">
+          <mat-tab *ngIf=" shutdown  && (vehicleCrashRating[0]?.FrontCrashVideo || vehicleCrashRating[0]?.SidePoleVideo || vehicleCrashRating[0]?.SideCrashVideo)" label="Crash Tests">
             <div class="container-crash">
               <div class="item mobile">
                 <h1  style="text-align: left;">Crash Test</h1>
                 <div class="crash-tests fade-in-fwd-detail">
-
-                    <button *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(1,vehicleCrashRating[0]?.FrontCrashVideo)">Front Crash</button>
-                    <button *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(2,vehicleCrashRating[0]?.SidePoleVideo)">Side Pole Crash</button>
-                    <button *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(3,vehicleCrashRating[0]?.SideCrashVideo)">Side Crash</button>
-                    <button  *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(1,'Front End',vehicleCrashRating[0]?.FrontCrashVideo,crash)">Front Crash</button>
-                    <button *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(3,'Side Pole',vehicleCrashRating[0]?.SidePoleVideo,crash)">Side Pole Crash</button>
-                    <button *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(2,'Side Crash',vehicleCrashRating[0]?.SideCrashVideo,crash)">Side Crash</button>
+                    <button [disabled]="isVidLoading" *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(1,vehicleCrashRating[0]?.FrontCrashVideo)">Front Crash</button>
+                    <mat-spinner class="is-mobile" *ngIf="isVidLoading" [diameter]="150"  [strokeWidth]="5"   [ngStyle]="{ position: 'absolute' }"></mat-spinner>
+                    <button [disabled]="isVidLoading" *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(2,vehicleCrashRating[0]?.SidePoleVideo)">Side Pole Crash</button>
+                    <button [disabled]="isVidLoading" *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="is-mobile" (click)="loadCrashVideo(3,vehicleCrashRating[0]?.SideCrashVideo)">Side Crash</button>
+                    <button  [disabled]="isVidLoading"  *ngIf="vehicleCrashRating[0]?.FrontCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(1,'Front End',vehicleCrashRating[0]?.FrontCrashVideo,crash)">Front Crash</button>
+                    <mat-spinner *ngIf="isVidLoading" [ngStyle]="{ position: 'absolute' }"  [strokeWidth]="5"  class="desktop"></mat-spinner>
+                    <button  [disabled]="isVidLoading" *ngIf="vehicleCrashRating[0]?.SidePoleVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(3,'Side Pole',vehicleCrashRating[0]?.SidePoleVideo,crash)">Side Pole Crash</button>
+                    <button  [disabled]="isVidLoading" *ngIf="vehicleCrashRating[0]?.SideCrashVideo" mat-raised-button class="desktop" (click)="getVideoCrashModal(2,'Side Crash',vehicleCrashRating[0]?.SideCrashVideo,crash)">Side Crash</button>
 
                     
                     

@@ -29,8 +29,11 @@
             "styles": [
               "@angular/material/prebuilt-themes/rose-red.css",
               "src/styles.css"
+         
             ],
-            "scripts": []
+            "scripts": [
+              
+            ]
           },
           "configurations": {
             "production": {
@@ -94,5 +97,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "2fa959e7-93ef-4406-af02-8914ae2de516"
   }
 }

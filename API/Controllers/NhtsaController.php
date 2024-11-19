@@ -2,6 +2,7 @@
 
 
 require '../vendor/autoload.php'; // Ensure this line is included to load Composer's autoloader
+require '../Config/RedisCache.php';
 header("Access-Control-Allow-Origin: *"); // Allow all origins, or specify your Angular app's URL
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Allow specific HTTP methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
@@ -30,6 +31,7 @@ function getVehicleModel($year, $model)
     $url = $apiUrl;
 
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -52,6 +54,7 @@ function getVehicleByYear($modelYear)
     $url = $apiUrl . $modelYear;
 
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -75,6 +78,7 @@ function getComplaints($year, $make, $model)
     $url = $apiUrl;
 
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -100,6 +104,7 @@ function getRecalls($year, $make, $model, $catch = 0)
     $url = $apiUrl;
 
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -136,6 +141,7 @@ function getVehicleCrashRating($id)
     $url = $apiUrl . $id;
 
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -157,6 +163,7 @@ function carSeatInspectionLocatorByState($state)
     $url = $apiUrl . $state;
 
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -184,6 +191,7 @@ function carSeatInspectionLocatorByZip($zip)
     ]);
     $url = $apiUrl . $zip;
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -209,6 +217,7 @@ function getVehicleCrashRatingId($year, $make, $model)
     $url = $apiUrl;
 
     try {
+        usleep(500000);
         $response = $client->request('GET', $url);
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
@@ -257,8 +266,64 @@ function getVehicleInvestigation($start, $end, $offset = 0)
     }
 }
 
+
+function checkRateLimit($clientIp) {
+    $redis = new RedisCache();
+    $redis->connect('127.0.0.1'); // Use 'redis' as hostname if within Docker
+
+    $key = "videoPlayback:$clientIp";
+    $limit = 5; // Allow 5 calls
+    $timeWindow = 60; // 1 minute time window
+
+    // Get the current count of requests
+    $currentCount = $redis->get($key);
+
+    // Check if the limit is reached
+    if ($currentCount && $currentCount >= $limit) {
+        header("HTTP/1.1 429 Too Many Requests");
+        die("Rate limit exceeded. Try again later.");
+    }
+
+    // Increment the count
+    $redis->incr($key);
+
+    // Set expiration only if this is the first request in the time window
+    if ($currentCount === false) {
+        $redis->expire($key, $timeWindow);
+    }
+}
+
+function throttleRequests($clientIp) {
+    $delayBetweenCalls = 5; // Delay in seconds
+    $lastCallTime = $_SESSION[$clientIp]['last_call'] ?? 0;
+
+    if (time() - $lastCallTime < $delayBetweenCalls) {
+        header("HTTP/1.1 429 Too Many Requests");
+        die("Please wait before making another request.");
+    }
+
+    $_SESSION[$clientIp]['last_call'] = time();
+}
+
+
+function getClientIPForLimit( ) {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
 function videoPlayback($image)
 {
+     $clientIp = getClientIPForLimit();
+    // Check rate limiting and throttle requests
+    // checkRateLimit($clientIp);
+     throttleRequests($clientIp);
+
     $videoUrl = $image;
     $tempWmvFile = '/var/www/html/tmp/temp_video.wmv'; // Temporary WMV file path
     $tempMp4File = '/var/www/html/tmp/temp_video.mp4'; // Temporary MP4 file path
@@ -287,6 +352,9 @@ function videoPlayback($image)
         $video = $ffmpeg->open($tempWmvFile);
         $format = new X264();
         $format->setAudioCodec('aac'); // Ensure audio codec is set
+
+        $command = "ffmpeg -i {$tempWmvFile} -c:v libx264 -preset fast -b:v 1500k -vf scale=1280:720 -c:a aac {$tempMp4File}";
+        error_log("FFmpeg Command: $command");
 
         // Optimizations for faster conversion
         $format->setKiloBitrate(1500); // Set bitrate (adjust as needed)
@@ -348,6 +416,7 @@ function videoPlayback($image)
         unlink($tempWmvFile);
         unlink($tempMp4File);
     } catch (\Exception $e) {
+        error_log('Error: ' . $e->getMessage());
         die('Error: ' . $e->getMessage());
     }
 }

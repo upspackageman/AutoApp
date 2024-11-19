@@ -61,7 +61,7 @@ export class LoginComponent {
       
       this.redirect();
     }, error => {
-      console.log(error);
+      console.error(error);
     })
   }
 
