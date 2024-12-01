@@ -46,7 +46,7 @@ function getTrack(){
 
 
     $result = $this->model->logVisitor($ip_address, $visited_page, $timestamp, $ip_info['country_name'], $ip_info['country_code'],$ip_info['city']);
-    $this->renderResponse($result);
+    //$this->renderResponse($result);
 }
 
 // Render the JSON response

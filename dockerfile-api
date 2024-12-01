@@ -18,11 +18,17 @@ COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/composer
 # Copy the API code
 COPY API/ .
 
+# Enable mod_rewrite for Apache
+RUN a2enmod rewrite
+
 # Install Composer dependencies
 RUN composer install
 
 # Copy custom Apache config
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+
+# Copy the .htaccess file
+  COPY API/.htaccess /var/www/html/.htaccess
 
 # Create the tmp directory and set proper permissions
 RUN mkdir -p /var/www/html/tmp && \
